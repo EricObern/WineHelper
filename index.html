@@ -3,68 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Wine Study Tool</title>
+    <title>Wine Tool v2.0</title>
     <style>
         :root {
-            --primary-color: #4a148c; /* Deep Purple */
-            --secondary-color: #f3e5f5; /* Light Lavender */
-            --accent-color: #7b1fa2; /* Medium Purple */
-            --text-color: #333;
-            --light-text: #fdfdfd;
-            --border-color: #ddd;
-            --shadow-color: rgba(0,0,0,0.1);
-            --success-color: #2e7d32;
-            --error-color: #c62828;
-            --gold-color: #fbc02d;
+            --bg-color: #f8f7f2; /* Sandy Off-White */
+            --text-color: #2c3e50; /* Dark Slate Blue */
+            --primary-color: #3498db; /* Bright Sky Blue */
+            --secondary-color: #9b59b6; /* Muted Purple as accent */
+            --accent-color: #e67e22; /* Warm Orange for highlights */
+            --light-gray: #ecf0f1;
+            --medium-gray: #bdc3c7;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(44, 62, 80, 0.15);
+            --success-color: #27ae60;
+            --error-color: #c0392b;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: var(--bg-color);
             color: var(--text-color);
+            font-size: 16px;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
+        h1, h2, h3, h4 { color: var(--text-color); }
 
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: var(--light-text);
-            padding: 25px 20px;
+            background-color: var(--card-bg);
+            padding: 20px 15px;
             text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border-bottom: 3px solid var(--primary-color);
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
+        header h1 { margin: 0; font-size: 2em; }
 
         .main-nav {
             display: flex;
             justify-content: center;
-            margin: 25px 0;
-            background-color: #fff;
+            margin: 20px 0;
+            background-color: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 2px 6px var(--shadow-color);
-            padding: 10px;
-            gap: 10px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            padding: 8px;
+            gap: 8px;
         }
-
         .main-nav-btn {
-            padding: 15px 30px;
+            padding: 12px 10px;
             border: none;
             background-color: transparent;
             color: var(--primary-color);
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -72,270 +62,202 @@
             flex-grow: 1;
             text-align: center;
         }
-
         .main-nav-btn.active {
             background-color: var(--primary-color);
-            color: var(--light-text);
-            box-shadow: 0 2px 8px rgba(74, 20, 140, 0.5);
+            color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
         }
 
-        .content-section {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+        .content-section { display: none; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .content-section.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-section.active {
-            display: block;
-        }
-        
-        .tool-container {
-            padding: 25px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px var(--shadow-color);
-        }
-
-        .sub-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 20px;
-        }
-
+        .tool-container { padding: 20px; background-color: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 6px var(--shadow-color); }
+        .sub-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--light-gray); padding-bottom: 15px; }
         .sub-nav-btn {
-            padding: 10px 20px;
-            border: 1px solid var(--accent-color);
-            background-color: #fff;
-            color: var(--accent-color);
+            padding: 8px 18px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--card-bg);
+            color: var(--primary-color);
             border-radius: 50px;
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
-        .sub-nav-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
+        .sub-nav-btn:hover { background-color: var(--light-gray); }
+        .sub-nav-btn.active { background-color: var(--primary-color); color: var(--card-bg); }
 
-        .sub-nav-btn.active {
-            background-color: var(--accent-color);
-            color: var(--light-text);
-            border-color: var(--accent-color);
-        }
-        
-        .tool-content {
-            display: none;
-        }
+        .tool-content { display: none; }
+        .tool-content.active { display: block; animation: fadeIn 0.4s; }
 
-        .tool-content.active {
-            display: block;
-            animation: fadeIn 0.4s;
-        }
-
-        /* Flashcards */
-        #flashcard-container {
-            perspective: 1500px;
-            width: 100%;
-            height: 400px;
-            margin: 20px auto;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            cursor: pointer;
-            box-shadow: 0 5px 20px var(--shadow-color);
-            border-radius: 15px;
-        }
-
-        .flashcard.is-flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-            box-sizing: border-box;
-            border-radius: 15px;
-            background-color: #fff;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .flashcard-front h2 {
-            font-size: 2.4em;
-            color: var(--primary-color);
-            text-align: center;
-        }
-
-        .flashcard-back {
-            transform: rotateY(180deg);
-            align-items: flex-start;
-            overflow-y: auto;
-        }
-        
-        .flashcard-back h3 {
-            color: var(--accent-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 5px;
-            margin: 10px 0;
-            width: 100%;
-        }
-        
-        .flashcard-back p { margin: 5px 0; width: 100%; }
-        .flashcard-back ul { padding-left: 20px; margin: 5px 0; width: 100%; }
-        
-        .flashcard-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .flashcard-nav button {
+        /* Generic Components */
+        .button {
             padding: 12px 24px;
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             background-color: var(--accent-color);
-            color: var(--light-text);
+            color: var(--card-bg);
             border: none;
             border-radius: 8px;
             transition: background-color 0.3s;
-        }
-        .flashcard-nav button:hover { background-color: var(--primary-color); }
-        
-        /* Quiz */
-        .quiz-question { margin-bottom: 25px; }
-        .quiz-question p { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; }
-        .quiz-options label {
             display: block;
-            margin: 10px 0;
-            padding: 15px;
-            background: var(--secondary-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            border-left: 5px solid transparent;
+            width: 100%;
+            margin-top: 15px;
+            box-sizing: border-box;
+            text-align: center;
         }
-        .quiz-options label:hover { background: #e1bee7; border-left: 5px solid var(--accent-color); }
-        .quiz-options input:checked + span { font-weight: bold; }
+        .button:hover { background-color: #d35400; }
         
-        #submit-quiz-btn {
-            margin-top: 20px;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: var(--success-color);
-            color: white;
-            border: none;
+        .wine-card {
+            background: var(--card-bg);
+            border: 1px solid var(--light-gray);
+            border-left: 5px solid var(--primary-color);
             border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding: 15px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 15px;
         }
-        #submit-quiz-btn:hover { background-color: #1b5e20; }
-        #quiz-results { margin-top: 25px; font-size: 1.3em; font-weight: bold; text-align: center; }
-        .result-feedback { padding: 15px; margin-top: 10px; border-radius: 8px; font-weight: 500;}
+        .wine-card.eighty-sixed {
+            opacity: 0.5;
+            background-color: var(--light-gray);
+            text-decoration: line-through;
+        }
+        .wine-card h4 { margin-top: 0; }
 
-        /* Visuals */
-        .chart-container { margin-bottom: 50px; }
-        .chart-title { text-align: center; font-size: 1.8em; color: var(--primary-color); margin-bottom: 25px; }
-        .bar-chart { display: grid; gap: 15px; }
-        .bar-chart-item { display: grid; grid-template-columns: 200px 1fr; align-items: center; gap: 10px; }
-        .bar-label { text-align: right; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .bar-wrapper { background-color: var(--secondary-color); border-radius: 5px; }
-        .bar {
-            height: 30px;
-            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
-            border-radius: 5px;
-            color: white;
+        /* 86d Toggle */
+        .eightsix-toggle {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            box-sizing: border-box;
-            box-shadow: 2px 2px 5px var(--shadow-color);
-            white-space: nowrap;
-            transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        /* Serving Tools */
-        .filter-group { margin-bottom: 25px; }
-        .filter-group h3 { color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
-        .filter-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .filter-tags label {
-            display: inline-block;
-            margin: 5px;
-            padding: 8px 15px;
-            background-color: var(--secondary-color);
-            border-radius: 50px;
+            gap: 8px;
             cursor: pointer;
-            user-select: none;
-            transition: all 0.3s ease;
+            font-weight: bold;
+            color: var(--error-color);
+        }
+        .eightsix-toggle input { display: none; }
+        .eightsix-toggle .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+        .eightsix-toggle .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 22px;
+        }
+        .eightsix-toggle .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        .eightsix-toggle input:checked + .slider { background-color: var(--error-color); }
+        .eightsix-toggle input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Flashcards */
+        #flashcard-container { display: grid; gap: 15px; }
+        .flashcard-item h3 { display: flex; justify-content: space-between; align-items: center; }
+
+        /* Quiz */
+        .quiz-question { margin-bottom: 20px; }
+        .quiz-question p { font-weight: bold; font-size: 1.1em; }
+        .quiz-options label {
+            display: block;
+            margin: 8px 0;
+            padding: 12px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            border-left: 5px solid transparent;
+        }
+        .quiz-options label:hover { border-left: 5px solid var(--primary-color); }
+        #quiz-results { margin-top: 20px; font-size: 1.2em; font-weight: bold; text-align: center; }
+
+        /* Visual Explorer */
+        .spectrum-analyzer, .comparative-groupings { margin-top: 20px; }
+        .spectrum-chart { margin-bottom: 25px; }
+        .spectrum-chart h4 { text-align: center; margin-bottom: 10px; }
+        .spectrum-bar {
+            height: 25px;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            border-radius: 5px;
+            width: 0; /* Animated with JS */
+            transition: width 0.8s ease-out;
+            position: relative;
+        }
+        .spectrum-legend { display: flex; justify-content: space-between; font-size: 0.8em; font-weight: 500; }
+        .wine-plot-list .wine-item {
+            padding: 8px; cursor: pointer; border-radius: 5px; margin-bottom: 5px;
+        }
+        .wine-plot-list .wine-item:hover { background-color: var(--light-gray); }
+        .wine-plot-list .wine-item.selected { background-color: var(--accent-color); color: white; }
+
+        .group-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .group-btn {
+             padding: 8px 15px; border: 1px solid var(--primary-color);
+             background-color: var(--card-bg); color: var(--primary-color);
+             border-radius: 20px; cursor: pointer; font-weight: 500;
+        }
+        .group-btn.active { background-color: var(--primary-color); color: var(--card-bg); }
+        .comparison-grid { display: grid; gap: 15px; }
+        .comparison-card { padding: 15px; background: var(--light-gray); border-radius: 8px; }
+        .comparison-card h4 { margin: 0 0 10px 0; }
+        .comparison-card ul { margin: 0; padding-left: 20px; }
+        .comparison-card ul li { margin-bottom: 5px; }
+
+        /* Service Mode */
+        .filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .filter-tags label {
+            padding: 8px 15px; background-color: var(--light-gray);
+            border-radius: 20px; cursor: pointer; user-select: none; transition: all 0.2s ease;
         }
         .filter-tags input { display: none; }
         .filter-tags input:checked + label {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            box-shadow: 0 2px 5px rgba(74, 20, 140, 0.4);
+            background-color: var(--primary-color); color: var(--card-bg); box-shadow: 0 1px 3px var(--shadow-color);
         }
-
-        .results-grid, .food-pairing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .wine-card, .food-card {
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--accent-color);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+        .recommender-results .match-card { margin-bottom: 15px; border-left: 5px solid var(--success-color); }
+        .recommender-results .match-card.partial { border-left-color: var(--accent-color); }
+        .match-card h4 { margin: 0 0 10px 0; }
+        .match-details { font-weight: bold; }
+        .match-details.mismatch { color: var(--error-color); }
         
-        .wine-card:hover { transform: translateY(-5px); box-shadow: 0 4px 10px var(--shadow-color); }
-        .wine-card h4, .food-card h3 { margin-top: 0; color: var(--primary-color); }
-        .food-card { cursor: pointer; border-left-color: var(--success-color); transition: all 0.2s ease; }
-        .food-card h3 { color: var(--success-color); }
-        .food-card:hover, .food-card.selected { background-color: var(--secondary-color); transform: translateY(-5px); box-shadow: 0 4px 10px var(--shadow-color); }
-        #pairing-results { margin-top: 25px; }
-        #pairing-results h3 { color: var(--primary-color); }
-        .note { color: var(--gold-color); font-weight: bold; margin-top: 10px; }
-
-        @media (max-width: 768px) {
-            .main-nav { flex-direction: column; }
-            .bar-chart-item { grid-template-columns: 1fr; gap: 5px; }
-            .bar-label { text-align: left; }
-            .results-grid, .food-pairing-grid { grid-template-columns: 1fr; }
-            header h1 { font-size: 2em; }
+        .food-pairing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .food-card {
+            padding: 15px; text-align: center; font-weight: bold; background-color: var(--card-bg);
+            border-radius: 8px; box-shadow: 0 1px 3px var(--shadow-color); cursor: pointer;
+            border: 1px solid var(--light-gray); transition: all 0.2s ease;
         }
+        .food-card:hover, .food-card.selected {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 8px var(--shadow-color);
+            background-color: var(--primary-color);
+            color: var(--card-bg);
+        }
+        #pairing-results .special-note {
+            background-color: #fef9e7;
+            border-left: 4px solid var(--accent-color);
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .hook-note { font-style: italic; color: #555; margin-top: 10px; }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Wine Study & Service Tool</h1>
+        <h1>Wine Service Tool</h1>
     </header>
 
     <div class="container">
@@ -345,79 +267,68 @@
         </nav>
 
         <main>
-            <!-- ======================= -->
-            <!-- ===== STUDY SECTION ===== -->
-            <!-- ======================= -->
+            <!-- STUDY SECTION -->
             <section id="study-section" class="content-section active">
                 <div class="tool-container">
-                    <nav class="sub-nav" id="study-sub-nav">
+                    <nav class="sub-nav">
                         <button class="sub-nav-btn active" data-target="flashcards-tool">Flashcards</button>
-                        <button class="sub-nav-btn" data-target="quiz-tool">Quiz</button>
-                        <button class="sub-nav-btn" data-target="visuals-tool">Visual Aids</button>
+                        <button class="sub-nav-btn" data-target="quiz-tool">Smart Quiz</button>
+                        <button class="sub-nav-btn" data-target="visuals-tool">Visual Explorer</button>
                     </nav>
 
                     <div id="flashcards-tool" class="tool-content active">
                         <h2>Flashcards</h2>
-                        <p>Click the card to flip it. Use the buttons to navigate.</p>
-                        <div id="flashcard-container">
-                            <div class="flashcard" id="flashcard">
-                                <div class="card-face flashcard-front"><h2 id="flashcard-front-content"></h2></div>
-                                <div class="card-face flashcard-back" id="flashcard-back-content"></div>
-                            </div>
-                        </div>
-                        <div class="flashcard-nav">
-                            <button id="prev-card">Previous</button>
-                            <span id="card-counter"></span>
-                            <button id="next-card">Next</button>
-                        </div>
+                        <div id="flashcard-container"></div>
                     </div>
 
                     <div id="quiz-tool" class="tool-content">
-                        <h2>Knowledge Quiz</h2>
-                        <p>Test your expertise. A new quiz is generated each time you click the "Quiz" tab.</p>
+                        <h2>Smart Quiz</h2>
+                        <p>A new 5-question quiz is generated each time you click the "New Quiz" button.</p>
                         <div id="quiz-container"></div>
-                        <button id="submit-quiz-btn">Submit Answers</button>
                         <div id="quiz-results"></div>
+                        <button id="new-quiz-btn" class="button">New Quiz</button>
                     </div>
 
                     <div id="visuals-tool" class="tool-content">
-                        <h2>Visual Aids</h2>
-                        <p>Quickly compare wines based on their primary characteristics.</p>
-                        <div class="chart-container">
-                            <h3 class="chart-title">White & Rosé Wine Body Spectrum</h3>
-                            <div class="bar-chart" id="white-body-chart"></div>
+                        <nav class="sub-nav">
+                            <button class="sub-nav-btn active" data-target="spectrum-analyzer">Spectrum Analyzer</button>
+                            <button class="sub-nav-btn" data-target="comparative-groupings">Comparative Groupings</button>
+                        </nav>
+                        <div id="spectrum-analyzer" class="tool-content active">
+                            <h3>Spectrum Analyzer</h3>
+                            <p>Select a wine to see where it falls on each spectrum.</p>
+                            <div id="visual-wine-list" class="wine-plot-list"></div>
+                            <div id="spectrum-charts-container"></div>
                         </div>
-                        <div class="chart-container">
-                            <h3 class="chart-title">Red Wine Tannin Spectrum</h3>
-                            <div class="bar-chart" id="red-tannin-chart"></div>
+                        <div id="comparative-groupings" class="tool-content">
+                             <h3>Comparative Groupings</h3>
+                            <p>Select a grape to compare all available options side-by-side.</p>
+                            <div class="group-buttons" id="group-buttons-container"></div>
+                            <div class="comparison-grid" id="comparison-container"></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ========================= -->
-            <!-- ===== SERVICE SECTION ===== -->
-            <!-- ========================= -->
+            <!-- SERVICE SECTION -->
             <section id="service-section" class="content-section">
                  <div class="tool-container">
-                    <nav class="sub-nav" id="service-sub-nav">
-                        <button class="sub-nav-btn active" data-target="recommender-tool">Wine Recommender</button>
+                    <nav class="sub-nav">
+                        <button class="sub-nav-btn active" data-target="recommender-tool">Intelligent Recommender</button>
                         <button class="sub-nav-btn" data-target="pairing-tool">Food Pairing Guide</button>
                     </nav>
 
                     <div id="recommender-tool" class="tool-content active">
-                        <h2>Wine Recommender</h2>
-                        <p>Select tags based on what your guest is looking for to get instant recommendations.</p>
+                        <h2>Intelligent Recommender</h2>
+                        <p>Select tags based on your guest's preferences.</p>
                         <div id="filter-container"></div>
-                        <h3>Results:</h3>
-                        <div id="filter-results" class="results-grid">
-                            <p>Select one or more tags above to see matching wines.</p>
-                        </div>
+                        <h3>Recommendations</h3>
+                        <div class="recommender-results" id="filter-results"></div>
                     </div>
 
                     <div id="pairing-tool" class="tool-content">
                         <h2>Food Pairing Guide</h2>
-                        <p>Select a menu item to see the best wine pairings instantly.</p>
+                        <p>Select a menu item to see ideal pairings.</p>
                         <div id="food-menu-container" class="food-pairing-grid"></div>
                         <div id="pairing-results"></div>
                     </div>
@@ -427,319 +338,395 @@
     </div>
 
 <script>
-// ===================================================================================
-// ===== WINE & FOOD DATA (Source of Truth) =====
-// ===================================================================================
+// ===== DATA =====
 const wineData = [
-    { name: "Giavi DOCG Rosé Prosecco", type: "Sparkling", availability: "Bottle only", region: "Veneto, Italy", grapes: "Glera with Pinot Noir", taste: "Light-bodied, crisp, fine bubbles, dry to off-dry, red berries, citrus freshness.", aroma: "Wild strawberries, raspberries, rose petals, citrus zest, green apple.", pairings: ["Wine Country Sangria Salad", "Heirloom Tomato Burrata", "Watermelon Seasonal Fruit bowl", "Vanilla Yogurt and Granola Bowl"], tags: ["Light", "Crisp", "Bubbly", "Fruity", "Refreshing"]},
-    { name: "Bisol Jeio Brut Prosecco", type: "Sparkling", availability: "By glass or by bottle", region: "Valdobbiadene, Veneto, Italy", grapes: "Glera", taste: "Crisp, clean, vibrant acidity, dry, smooth, pear, apple, citrus.", aroma: "Green apple, white peach, acacia flowers, pear skin, lemon peel.", pairings: ["Modern Ceasar", "Watermelon Seasonal Fruit Bowl", "Wine Country Sangria Salad", "Green Goddess"], tags: ["Light", "Crisp", "Bubbly", "Dry", "Refreshing"]},
-    { name: "Allimant-Laugner Crémant d'Alsace Brut", type: "Sparkling", availability: "By glass or by bottle", region: "Alsace, France", grapes: "Pinot Blanc, Pinot Auxerrois, Riesling, etc.", taste: "Elegant, refined, creamy mousse, bright acidity, green apple, pear, brioche.", aroma: "White blossoms, apple blossom, citrus rind, toasty, bread, honey.", pairings: ["Smoked salmon plate", "French Style Omelet", "Modern Ceasar", "Mahi and Meyer Lemon Sandwich"], tags: ["Elegant", "Creamy", "Bubbly", "Toasty", "Dry"]},
-    { name: "Taittinger Brut La Française Champagne", type: "Sparkling", availability: "By glass and by Bottle", region: "Champagne, France", grapes: "Chardonnay, Pinot Noir, Pinot Meunier", taste: "Medium-bodied, balanced, persistent bubbles, dry, apple, peach, brioche, creamy.", aroma: "Toasted brioche, hazelnut, citrus peel, green apple, honeysuckle.", pairings: ["Crab Cake Benny", "Ham and Cheese Croissant", "French Style Omelet", "Heirloom Tomato Burrata"], tags: ["Classic", "Creamy", "Bubbly", "Toasty", "Elegant", "Rich"]},
-    { name: "Sea Cove Sauvignon Blanc", type: "White", availability: "By glass or bottle", region: "Marlborough, New Zealand", grapes: "Sauvignon Blanc", taste: "Light-bodied, zesty, high acidity, dry, strong citrus and tropical fruit.", aroma: "Passionfruit, lime, grapefruit, fresh-cut grass, bell pepper.", pairings: ["Smoked Salmon Plate", "Chickpea and Salmon Plate", "Wine Country Sangria Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Light", "Crisp", "Zesty", "Grassy", "Refreshing"], body: "Light"},
-    { name: "Hourglass Sauvignon Blanc", type: "White", availability: "By glass or bottle", region: "Napa Valley, California", grapes: "91% Sauvignon Blanc, 9% Semillon", taste: "Medium-bodied, richer texture, rounded finish, citrus, melon, stone fruit.", aroma: "White peach, lemongrass, citrus zest, subtle oak spice.", pairings: ["Mahi and Meyer Lemon Sandwich", "Green Goddess", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Medium-Bodied", "Rich", "Fruity", "Elegant"], body: "Medium"},
-    { name: "Daniel Reverdy Sancerre", type: "White", availability: "By glass or bottle", region: "Loire Valley, France", grapes: "Sauvignon Blanc", taste: "Light to medium-bodied, crisp, bone-dry, elegant minerality.", aroma: "Lime, green apple, flint, wet stone, grass, white flowers.", pairings: ["Modern Ceasar Salad", "French Style Omelet", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Mineral", "Elegant", "Grassy"], body: "Light"},
-    { name: "La Marea Albariño", type: "White", availability: "By glass or bottle", region: "Monterey, California", grapes: "Albariño", taste: "Crisp, saline, medium acidity, dry, light to medium-bodied, citrus and stone fruit.", aroma: "Lemon zest, apricot, sea spray, white flowers, peach, mandarin.", pairings: ["Shakshuka", "Coastal Chickpea and Salmon", "Smoked Salmon Plate", "Mahi and Meyer Lemon Sandwich", "Modern Ceasar Salad"], tags: ["Crisp", "Mineral", "Fruity", "Refreshing", "Coastal"], body: "Light"},
-    { name: "Hill Family White Barrel Blend", type: "White", availability: "By glass or bottle", region: "Napa Valley, California", grapes: "Chardonnay and Sauvignon Blanc", taste: "Medium to full-bodied, oak influence, richness, creaminess, ripe fruit, and vanilla.", aroma: "Baked apple, vanilla, honeydew melon, spice, toasty oak.", pairings: ["Crab Cake Benny", "French Style Omelet", "Smoked Salmon Plate", "Coastal Chickpea and Salmon"], tags: ["Rich", "Creamy", "Full-Bodied", "Oaked"], body: "Full"},
-    { name: "Elena Walch Pinot Grigio", type: "White", availability: "By glass and bottle", region: "Alto Adige, Italy", grapes: "Pinot Grigio", taste: "Light-bodied, crisp, dry, lively acidity with clean citrus and orchard fruit.", aroma: "Green apple, lemon, pear, almond blossom, slightly mineral.", pairings: ["Mahi and Meyer Lemon Sandwich", "Green Goddess", "Orchard Chicken Salad Croissant", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Refreshing", "Mineral"], body: "Light"},
-    { name: "Eric Variet Bourgogne Aligoté", type: "White", availability: "By glass or bottle", region: "Burgundy, France", grapes: "Aligoté", taste: "Light-bodied, high acidity, bone-dry, lean with subtle fruit.", aroma: "Lemon, green apple, white flowers, chalky minerality, flinty.", pairings: ["Smoked Salmon Plate", "Coastal Chickpea", "Green Goddess", "Modern Ceasar"], tags: ["Light", "Crisp", "Dry", "Mineral", "Zesty"], body: "Light"},
-    { name: "RouteStock Route 121 Chardonnay", type: "White", availability: "By glass or bottle", region: "Carneros, California", grapes: "Chardonnay blend (Wente, Dijon, Musque)", taste: "Medium to full-bodied, balanced oak and acidity, creamy texture, ripe fruit, toasty notes.", aroma: "Baked apple, lemon curd, toasted brioche, vanilla, nutmeg, light butter.", pairings: ["Mahi and Meyer Lemon Sandwich", "Heirloom Tomato Burrata", "Smoked Salmon Plate", "Modern Ceasar Salad"], tags: ["Rich", "Creamy", "Oaked", "Full-Bodied", "Toasty"], body: "Full"},
-    { name: "ZD Chardonnay", type: "White", availability: "By glass or bottle", region: "Napa Valley, California", grapes: "Chardonnay", taste: "Full-bodied, luxurious, rich texture, moderate oak, lush tropical, stone, and citrus fruit.", aroma: "Pineapple, mango, pear, vanilla bean, toasty oak, creamy finish.", pairings: ["Crab Cake Benny", "Smoked Salmon Plate", "Heirloom Tomato Burrata", "Orchard Chicken Salad Croissant"], tags: ["Rich", "Creamy", "Full-Bodied", "Oaked", "Fruity"], body: "Full"},
-    { name: "Paul Lato Chardonnay", type: "White", availability: "By bottle only", region: "Santa Barbara, California", grapes: "Chardonnay", taste: "Full-bodied, elegant, nuanced, balanced acidity, vibrant fruit, integrated oak.", aroma: "Lemon curd, nectarine, white flower, crème brûlée, toasted almond, wet stone.", pairings: ["Mahi and Meyer Lemon Sandwich", "Smoked Salmon Plate", "Crab Cake Benny", "Orchard Chicken Salad Croissant"], tags: ["Rich", "Creamy", "Full-Bodied", "Oaked", "Elegant", "Mineral"], body: "Full"},
-    { name: "Domaine Fèvre Premier Cru White Burgundy", type: "White", availability: "By bottle only", region: "Chablis, Burgundy, France", grapes: "Chardonnay", taste: "Medium-bodied, bone-dry, razor-sharp acidity, intense minerality.", aroma: "Lemon, oyster shell, flint, white flowers, subtle chalk and saline edge.", pairings: ["Chicken and Artichoke Soup", "Modern Ceasar with Salmon", "French Style Omelet", "Crab Cake Benny"], tags: ["Crisp", "Dry", "Mineral", "Elegant", "Zesty", "Classic"], body: "Medium"},
-    { name: "Lucy by Pisoni Rosé", type: "Rosé", availability: "By glass or bottle", region: "Santa Lucia Highlands, California", grapes: "100% Pinot Noir", taste: "Dry, crisp, refreshing, light to medium-bodied with notes of wild strawberry, cherry, watermelon.", aroma: "Red berries (strawberry, raspberry), rose petal, orange peel, white peach.", pairings: ["Smoked Salmon Plate", "Wine Country Sangria", "Mahi and Meyer Lemon Sandwich", "Heirloom Tomato and Peach Burrata"], tags: ["Light", "Crisp", "Dry", "Fruity", "Refreshing"], note: "A portion of proceeds supports breast cancer research.", body: "Light"},
-    { name: "La Croix Peyrassol Rosé", type: "Rosé", availability: "By glass or bottle", region: "Côtes de Provence, France", grapes: "Cinsault, Grenache, Syrah", taste: "Pale, bone-dry, elegant, light-bodied with crisp acidity, delicate red berries, peach.", aroma: "Fresh strawberry, white peach, citrus blossom, subtle herbs (thyme), wet stone.", pairings: ["Coastal Chickpea and Salmon", "Mahi and Meyer Lemon Sandwich", "Wine Country Sangria Salad", "Smoked Salmon Plate"], tags: ["Light", "Crisp", "Dry", "Elegant", "Mineral", "Classic"], body: "Light"},
-    { name: "La Grangette Côtes du Rhône", type: "Red", availability: "By glass or bottle", region: "Rhône Valley, France", grapes: "Grenache, Syrah, Mourvèdre (GSM blend)", taste: "Medium-bodied, soft tannins, ripe red fruits, earthy, spicy undertones.", aroma: "Black cherry, raspberry, garrigue (herbs), white pepper, dusty earth.", pairings: ["French Style Omelet", "Sun Kissed Pancakes", "Green Goddess", "Spicy Calabrese Flatbread"], tags: ["Earthy", "Spicy", "Medium-Bodied", "Fruity"], tannins: "Soft"},
-    { name: "Gundlach Bundschu Cabernet Blend", type: "Red", availability: "By glass or bottle", region: "Sonoma Valley, California", grapes: "Cabernet Sauvignon, Merlot", taste: "Full-bodied, structured tannins, dark fruit, soft Merlot roundness, notes of oak, cocoa.", aroma: "Blackcurrant, plum, tobacco, mocha, hints of graphite, cedar, vanilla.", pairings: ["Crab Cake Benny", "Smoked Salmon Plate", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured"], tannins: "Structured"},
-    { name: "Handley Pinot Noir", type: "Red", availability: "By glass or bottle", region: "Anderson Valley, California", grapes: "Pinot Noir", taste: "Light to medium-bodied, silky texture, bright acidity, red fruit-driven, elegant and earthy.", aroma: "Cherry, cranberry, rose petals, forest floor, tea leaf, spice.", pairings: ["Modern Ceasar Salad with Salmon", "Green Goddess", "Coastal Chickpea and Salmon"], tags: ["Light", "Earthy", "Elegant", "Fruity"], tannins: "Soft"},
-    { name: "Alexana Pinot Noir (Dundee Hills)", type: "Red", availability: "By bottle only", region: "Willamette Valley, Oregon", grapes: "Pinot Noir", taste: "Medium-bodied, vibrant acidity, structured but refined, ripe red fruit, earthy tones.", aroma: "Ripe cherry, raspberry, pomegranate, hints of cola, earth, dried herbs.", pairings: ["Costal Chickpea and Salmon", "Green Goddess", "Heirloom Tomato & Peach Burrata"], tags: ["Earthy", "Elegant", "Fruity", "Structured", "Medium-Bodied"], tannins: "Medium"},
-    { name: "Flanagan Cabernet Sauvignon", type: "Red", availability: "By glass or bottle", region: "Sonoma or Napa, California", grapes: "Cabernet Sauvignon", taste: "Full-bodied, intense, firm tannins, dark concentrated fruit, well-integrated oak.", aroma: "Blackberry, cassis, espresso, dark chocolate, toasted oak, vanilla, tobacco.", pairings: ["Breakfast burrito", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured", "Intense"], tannins: "Firm"},
-    { name: "RouteStock Cabernet Sauvignon (Route 29)", type: "Red", availability: "By glass or bottle", region: "Napa Valley, California", grapes: "Cabernet Sauvignon", taste: "Full-bodied, rich and smooth, ripe dark fruit, polished tannins.", aroma: "Blackberry, black cherry, mocha, vanilla, cedar, baking spices.", pairings: ["Shakshuka", "Spicy Calabrese Flatbread", "Breakfast Burrito"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Smooth"], tannins: "Structured"},
-    { name: "Hall Cabernet Sauvignon", type: "Red", availability: "By glass or bottle", region: "Napa Valley, California", grapes: "95% Cabernet Sauvignon, 5% Merlot", taste: "Powerful, opulent, full-bodied with bold tannins and lush fruit.", aroma: "Cassis, blueberry, licorice, graphite, dark chocolate, toasty oak.", pairings: ["Breakfast Burrito", "Ham & Cheese croissant", "Green Goddess"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured", "Intense"], tannins: "Firm"},
-    { name: "Frank Family Cabernet Sauvignon", type: "Red", availability: "By bottle only", region: "Napa Valley, California", grapes: "Cabernet Sauvignon, etc.", taste: "Rich, velvety, dark berries, firm tannins, plush texture.", aroma: "Blackberry, plum, vanilla bean, espresso, caramel, baking spice.", pairings: ["Ham and Cheese Croissant", "Coastal Chickpea and Salmon", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Smooth", "Structured"], tannins: "Firm"},
-    { name: "Château Anthonic Moulis-en-Médoc (Bordeaux)", type: "Red", availability: "By glass or bottle", region: "Left Bank, Bordeaux, France", grapes: "Merlot-dominant, Cabernet Sauvignon, etc.", taste: "Medium to full-bodied, earthy structure, firm tannins, restrained elegance.", aroma: "Blackcurrant, plum, graphite, tobacco, leather, cedar.", pairings: ["Shakshuka", "Breakfast Burrito", "Spicy Calabrese Flatbread"], tags: ["Earthy", "Structured", "Classic", "Medium-Bodied", "Old World"], tannins: "Firm"},
-    { name: "Shafer TD-9 (Bordeaux Blend)", type: "Red", availability: "By bottle only", region: "Napa Valley, California", grapes: "Merlot, Cabernet Sauvignon, Malbec", taste: "Full-bodied, smooth, fruit-forward, silky tannins, lush mid-palate, rich dark fruit.", aroma: "Ripe plum, blackberry, blueberry, mocha, anise, baking spice.", pairings: ["Shakshuka", "Spicy Calabrese Flatbread", "Breakfast Burrito"], tags: ["Bold", "Rich", "Full-Bodied", "Smooth", "Fruity"], tannins: "Soft"},
-    { name: "Gaja Ca’Marcanda Promis Toscana IGT", type: "Red", availability: "By bottle only", region: "Tuscany, Italy", grapes: "Merlot, Syrah, Sangiovese", taste: "Medium to full-bodied, polished tannins, good acidity, juicy and balanced.", aroma: "Black cherry, blackberry, licorice, Mediterranean herbs, cocoa, dried rose.", pairings: ["Breakfast Burrito", "Smashed Avocado BLT", "Ham and Cheese Croissant", "Crab Cake Benny"], tags: ["Medium-Bodied", "Smooth", "Fruity", "Earthy", "Spicy", "Italian"], tannins: "Medium"}
+    { id: 1, name: "Giavi DOCG Rosé Prosecco", type: "Sparkling", availability: "Bottle only", region: "Veneto, Italy", grapes: "Glera, Pinot Noir", taste: "Light-bodied, crisp, dry. Notes of red berries (wild strawberry, raspberry) with bright citrus freshness and a hint of rose petals.", pairings: ["Wine Country Sangria Salad", "Heirloom Tomato Burrata", "Watermelon Seasonal Fruit bowl", "Vanilla Yogurt and Granola Bowl"], tags: ["Light", "Crisp", "Bubbly", "Fruity", "Refreshing"], scales: { body: 2, acidity: 4, fruit: 4 }, hook: "A high-quality DOCG Prosecco, meaning the grapes come from the best, steepest hills in the region." },
+    { id: 2, name: "Bisol Jeio Brut Prosecco", type: "Sparkling", availability: "By glass or by bottle", region: "Valdobbiadene, Veneto, Italy", grapes: "Glera", taste: "Crisp and clean with vibrant acidity. Dominated by pear, green apple, and citrus with a smooth, dry finish.", pairings: ["Modern Caesar Salad", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad", "Green Goddess"], tags: ["Light", "Crisp", "Bubbly", "Dry", "Orchard Fruit"], scales: { body: 2, acidity: 4, fruit: 3 }, hook: "From a family that has been making wine in the heart of Valdobbiadene for 21 generations." },
+    { id: 3, name: "Allimant-Laugner Crémant d'Alsace Brut", type: "Sparkling", availability: "By glass or by bottle", region: "Alsace, France", grapes: "Pinot Blanc, Auxerrois, Riesling", taste: "Elegant and refined with a creamy texture. Flavors of green apple, pear, and a distinct note of brioche or freshly baked bread.", pairings: ["Smoked Salmon Plate", "French Style Omelet", "Modern Caesar Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Elegant", "Creamy", "Bubbly", "Toasty", "Dry"], scales: { body: 3, acidity: 4, fruit: 2 }, hook: "Crémant is France's answer to high-quality sparkling wine outside of Champagne, often offering incredible value." },
+    { id: 4, name: "Taittinger Brut La Française Champagne", type: "Sparkling", availability: "By glass and by Bottle", region: "Champagne, France", grapes: "Chardonnay, Pinot Noir, Pinot Meunier", taste: "Medium-bodied and perfectly balanced. Flavors of apple, peach, and toasted brioche with a creamy, persistent mousse.", pairings: ["Crab Cake Benny", "Ham and Cheese Croissant", "French Style Omelet", "Heirloom Tomato Burrata"], tags: ["Classic", "Creamy", "Bubbly", "Toasty", "Elegant", "Rich"], scales: { body: 3, acidity: 4, fruit: 3 }, hook: "A benchmark non-vintage Champagne, known for its high percentage of Chardonnay, giving it elegance and finesse." },
+    { id: 5, name: "Sea Cove Sauvignon Blanc", type: "White", grape: "Sauvignon Blanc", region: "Marlborough, New Zealand", taste: "Light-bodied and zesty with high, refreshing acidity. Pungent notes of passionfruit, grapefruit, lime, and fresh-cut grass.", pairings: ["Smoked Salmon Plate", "Coastal Chickpea and Salmon", "Wine Country Sangria Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Light", "Crisp", "Zesty", "Grassy", "Refreshing", "Tropical"], scales: { body: 2, acidity: 5, fruit: 5 }, hook: "A classic, unmistakable example of Marlborough Sauvignon Blanc, the style that put New Zealand on the world wine map." },
+    { id: 6, name: "Hourglass Sauvignon Blanc", type: "White", grape: "Sauvignon Blanc", region: "Napa Valley, California", grapes: "91% Sauvignon Blanc, 9% Sémillon", taste: "Medium-bodied with a richer, rounder texture from the Sémillon. Notes of white peach, melon, and lemongrass with a hint of creaminess.", pairings: ["Mahi and Meyer Lemon Sandwich", "Green Goddess", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Medium-Bodied", "Rich", "Fruity", "Elegant", "Creamy"], scales: { body: 3, acidity: 4, fruit: 4 }, hook: "The small addition of Sémillon gives this a richer texture, setting it apart from grassy styles. Think more lush and less zesty." },
+    { id: 7, name: "Daniel Reverdy Sancerre", type: "White", grape: "Sauvignon Blanc", region: "Loire Valley, France", taste: "Light to medium-bodied, bone-dry with chiseled minerality. Flavors of lime, flint, wet stone, and subtle white flowers.", pairings: ["Modern Caesar Salad", "French Style Omelet", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Mineral", "Elegant", "Flinty"], scales: { body: 2, acidity: 5, fruit: 2 }, hook: "Sancerre is the French blueprint for Sauvignon Blanc. It's all about minerality and elegance over powerful fruit." },
+    { id: 8, name: "La Marea Albariño", type: "White", grape: "Albariño", region: "Monterey, California", taste: "Light, crisp, and dry with a distinct saline or sea-spray quality. Flavors of lemon zest, apricot, and white flowers.", pairings: ["Shakshuka", "Coastal Chickpea and Salmon", "Smoked Salmon Plate", "Mahi and Meyer Lemon Sandwich", "Modern Caesar Salad"], tags: ["Crisp", "Mineral", "Fruity", "Refreshing", "Coastal", "Saline"], scales: { body: 2, acidity: 4, fruit: 3 }, hook: "Albariño is famously from coastal Spain, and this Californian version captures that same refreshing, seaside character." },
+    { id: 9, name: "Hill Family White Barrel Blend", type: "White", grape: "Chardonnay", region: "Napa Valley, California", grapes: "Chardonnay, Sauvignon Blanc", taste: "Medium to full-bodied with a creamy texture from oak. Ripe fruit like baked apple and melon, with vanilla and spice notes.", pairings: ["Crab Cake Benny", "French Style Omelet", "Smoked Salmon Plate", "Coastal Chickpea and Salmon"], tags: ["Rich", "Creamy", "Full-Bodied", "Oaked"], scales: { body: 4, acidity: 3, fruit: 4 }, hook: "A unique blend where Chardonnay brings richness and Sauvignon Blanc adds a touch of citrus lift." },
+    { id: 10, name: "Elena Walch Pinot Grigio", type: "White", grape: "Pinot Grigio", region: "Alto Adige, Italy", taste: "Light-bodied, crisp, and dry with lively acidity. Clean notes of green apple, pear, and a hint of almond.", pairings: ["Mahi and Meyer Lemon Sandwich", "Green Goddess", "Orchard Chicken Salad Croissant", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Refreshing", "Mineral"], scales: { body: 2, acidity: 4, fruit: 3 }, hook: "This is from Alto Adige, a high-altitude region in Northern Italy known for producing the most aromatic and crisp Pinot Grigio." },
+    { id: 11, name: "Eric Variet Bourgogne Aligoté", type: "White", grape: "Aligoté", region: "Burgundy, France", taste: "Very light-bodied, bone-dry with high, zesty acidity. Flavors of lemon, green apple, and a chalky, flinty character.", pairings: ["Smoked Salmon Plate", "Coastal Chickpea and Salmon", "Green Goddess", "Modern Caesar Salad"], tags: ["Light", "Crisp", "Dry", "Mineral", "Zesty"], scales: { body: 1, acidity: 5, fruit: 2 }, hook: "Aligoté is Burgundy's 'other' white grape. A favorite of locals and sommeliers for its bracing acidity." },
+    { id: 12, name: "RouteStock Route 121 Chardonnay", type: "White", grape: "Chardonnay", region: "Carneros, California", taste: "Medium to full-bodied with balanced oak and acidity. Creamy texture with notes of baked apple, lemon curd, and toasted brioche.", pairings: ["Mahi and Meyer Lemon Sandwich", "Heirloom Tomato Burrata", "Smoked Salmon Plate", "Modern Caesar Salad"], tags: ["Rich", "Creamy", "Oaked", "Full-Bodied", "Toasty", "Balanced"], scales: { body: 4, acidity: 4, fruit: 4 }, hook: "From Carneros, a cool-climate region perfect for Chardonnay that is both ripe and refreshing." },
+    { id: 13, name: "ZD Chardonnay", type: "White", grape: "Chardonnay", region: "Napa Valley, California", taste: "Full-bodied, rich, and luxurious. Low acidity. Lush notes of pineapple and mango, with prominent vanilla bean and toasty oak.", pairings: ["Crab Cake Benny", "Smoked Salmon Plate", "Heirloom Tomato Burrata", "Orchard Chicken Salad Croissant"], tags: ["Rich", "Creamy", "Full-Bodied", "Oaked", "Fruity", "Buttery"], scales: { body: 5, acidity: 2, fruit: 5 }, hook: "A classic, bold, and unapologetic style of Napa Chardonnay. Fermented in American Oak for a richer, more powerful profile." },
+    { id: 14, name: "Paul Lato Chardonnay", type: "White", grape: "Chardonnay", availability: "By bottle only", region: "Santa Barbara, California", taste: "Full-bodied yet elegant and balanced. Vibrant acidity meets flavors of lemon curd, nectarine, and crème brûlée with a mineral finish.", pairings: ["Mahi and Meyer Lemon Sandwich", "Smoked Salmon Plate", "Crab Cake Benny", "Orchard Chicken Salad Croissant"], tags: ["Rich", "Elegant", "Full-Bodied", "Oaked", "Mineral", "Balanced"], scales: { body: 4, acidity: 4, fruit: 4 }, hook: "A sommelier-favorite producer, known for balancing Californian richness with European-style structure and acidity." },
+    { id: 15, name: "Domaine Fèvre Premier Cru White Burgundy", type: "White", grape: "Chardonnay", availability: "By bottle only", region: "Chablis, Burgundy, France", taste: "Medium-bodied, bone-dry with razor-sharp acidity. Intense flavors of lemon, oyster shell, and flint. No oak presence.", pairings: ["Chicken and Artichoke Soup", "Modern Caesar with Salmon", "French Style Omelet", "Crab Cake Benny"], tags: ["Crisp", "Dry", "Mineral", "Elegant", "Zesty", "Unoaked", "Classic"], scales: { body: 3, acidity: 5, fruit: 1 }, hook: "Chablis is Chardonnay in its purest form—all about the chalky soil, not oak barrels. This is a Premier Cru, a top-tier vineyard site." },
+    { id: 16, name: "Lucy by Pisoni Rosé", type: "Rosé", grape: "Pinot Noir", region: "Santa Lucia Highlands, California", taste: "Dry, crisp, and refreshing. Light-bodied with notes of wild strawberry, cherry, and watermelon.", pairings: ["Smoked Salmon Plate", "Wine Country Sangria Salad", "Mahi and Meyer Lemon Sandwich", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Fruity", "Refreshing"], scales: { body: 2, acidity: 4, fruit: 4 }, hook: "A portion of proceeds from every bottle of Lucy Rosé is donated to support breast cancer research." },
+    { id: 17, name: "La Croix Peyrassol Rosé", type: "Rosé", grape: "Cinsault", region: "Côtes de Provence, France", grapes: "Cinsault, Grenache, Syrah", taste: "Pale, bone-dry, and elegant. Light-bodied with delicate red berries, white peach, and a saline, stony minerality.", pairings: ["Coastal Chickpea and Salmon", "Mahi and Meyer Lemon Sandwich", "Wine Country Sangria Salad", "Smoked Salmon Plate"], tags: ["Light", "Crisp", "Dry", "Elegant", "Mineral", "Classic"], scales: { body: 2, acidity: 4, fruit: 2 }, hook: "The absolute benchmark for Provence Rosé: light, elegant, and mineral-driven. From an estate with roots going back to the 13th century." },
+    { id: 18, name: "La Grangette Côtes du Rhône", type: "Red", grape: "Grenache", region: "Rhône Valley, France", grapes: "Grenache, Syrah, Mourvèdre", taste: "Medium-bodied with soft tannins. Ripe red fruits (cherry, raspberry) with earthy notes of garrigue (wild herbs) and white pepper.", pairings: ["French Style Omelet", "Sun Kissed Pancakes", "Green Goddess", "Spicy Calabrese Flatbread"], tags: ["Earthy", "Spicy", "Medium-Bodied", "Fruity", "Herbal"], scales: { body: 3, acidity: 3, fruit: 3, tannins: 2 }, hook: "A classic 'bistro red' from Southern France that is versatile and exceptionally food-friendly." },
+    { id: 19, name: "Gundlach Bundschu Cabernet Blend", type: "Red", grape: "Cabernet Sauvignon", region: "Sonoma Valley, California", grapes: "Cabernet Sauvignon, Merlot", taste: "Full-bodied with structured tannins. Dark fruit like plum and blackberry, with Merlot adding softness. Notes of oak, cocoa, and spice.", pairings: ["Crab Cake Benny", "Smoked Salmon Plate", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured"], scales: { body: 4, acidity: 3, fruit: 4, tannins: 4 }, hook: "From the oldest family-owned winery in California, established in 1858." },
+    { id: 20, name: "Handley Pinot Noir", type: "Red", grape: "Pinot Noir", region: "Anderson Valley, California", taste: "Light to medium-bodied with a silky texture. Bright acidity lifts flavors of cherry, cranberry, and rose petals with an earthy 'forest floor' finish.", pairings: ["Modern Caesar with Salmon", "Green Goddess", "Coastal Chickpea and Salmon"], tags: ["Light", "Earthy", "Elegant", "Fruity", "Silky"], scales: { body: 2, acidity: 4, fruit: 4, tannins: 2 }, hook: "Anderson Valley is a cool, coastal region known for producing elegant, restrained Pinot Noir, closer to a French style." },
+    { id: 21, name: "Alexana Pinot Noir (Dundee Hills)", type: "Red", grape: "Pinot Noir", availability: "By bottle only", region: "Willamette Valley, Oregon", taste: "Medium-bodied with vibrant acidity and refined structure. Ripe cherry and raspberry notes mix with earthy tones of dried herbs and a hint of cola.", pairings: ["Coastal Chickpea and Salmon", "Green Goddess", "Heirloom Tomato Burrata"], tags: ["Earthy", "Elegant", "Fruity", "Structured", "Medium-Bodied"], scales: { body: 3, acidity: 4, fruit: 4, tannins: 3 }, hook: "The Dundee Hills are iconic in Oregon, producing Pinot Noir with a signature combination of rich fruit and volcanic soil minerality." },
+    { id: 22, name: "Flanagan Cabernet Sauvignon", type: "Red", grape: "Cabernet Sauvignon", region: "Sonoma, California", taste: "Full-bodied and intense with firm, fine-grained tannins. Concentrated flavors of blackberry and cassis with notes of espresso and dark chocolate.", pairings: ["Breakfast Burrito", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured", "Intense"], scales: { body: 5, acidity: 3, fruit: 5, tannins: 5 }, hook: "A powerful, ageworthy Cabernet that showcases the best of Sonoma's warmer vineyard sites." },
+    { id: 23, name: "RouteStock Cabernet Sauvignon (Route 29)", type: "Red", grape: "Cabernet Sauvignon", region: "Napa Valley, California", taste: "Full-bodied, rich, and smooth. Polished tannins with ripe blackberry and black cherry fruit, complemented by vanilla and baking spices from oak.", pairings: ["Shakshuka", "Spicy Calabrese Flatbread", "Breakfast Burrito"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Smooth"], scales: { body: 4, acidity: 3, fruit: 5, tannins: 4 }, hook: "A quintessential Napa Valley Cabernet, designed to be approachable and delicious upon release." },
+    { id: 24, name: "Hall Cabernet Sauvignon", type: "Red", grape: "Cabernet Sauvignon", region: "Napa Valley, California", grapes: "95% Cabernet Sauvignon, 5% Merlot", taste: "Powerful and opulent. Full-bodied with bold, velvety tannins. Lush cassis, blueberry, and licorice flavors with a long finish.", pairings: ["Breakfast Burrito", "Ham and Cheese Croissant", "Green Goddess"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Structured", "Intense"], scales: { body: 5, acidity: 3, fruit: 5, tannins: 5 }, hook: "A modern Napa icon, known for its opulent style and for receiving multiple 100-point scores from critics." },
+    { id: 25, name: "Frank Family Cabernet Sauvignon", type: "Red", grape: "Cabernet Sauvignon", availability: "By bottle only", region: "Napa Valley, California", taste: "Rich and velvety with plush texture. Flavors of blackberry and plum are balanced with vanilla, espresso, and caramel from new French oak.", pairings: ["Ham and Cheese Croissant", "Coastal Chickpea and Salmon", "Shakshuka"], tags: ["Bold", "Rich", "Full-Bodied", "Oaked", "Smooth", "Structured"], scales: { body: 5, acidity: 3, fruit: 5, tannins: 4 }, hook: "Located in the historic Larkmead winery, Frank Family is one of Napa's most popular and beloved producers." },
+    { id: 26, name: "Château Anthonic Moulis-en-Médoc", type: "Red", grape: "Merlot", region: "Bordeaux, France", grapes: "Merlot, Cabernet Sauvignon", taste: "Medium-bodied with an earthy, savory structure and firm tannins. Flavors of blackcurrant and plum mix with notes of tobacco, leather, and cedar.", pairings: ["Shakshuka", "Breakfast Burrito", "Spicy Calabrese Flatbread"], tags: ["Earthy", "Structured", "Classic", "Medium-Bodied", "Savory"], scales: { body: 4, acidity: 4, fruit: 2, tannins: 4 }, hook: "A classic 'Left Bank' Bordeaux, which is Merlot-dominant for softness, but maintains a savory, food-friendly structure." },
+    { id: 27, name: "Shafer TD-9 (Bordeaux Blend)", type: "Red", grape: "Merlot", availability: "By bottle only", region: "Napa Valley, California", grapes: "Merlot, Cabernet Sauvignon, Malbec", taste: "Full-bodied, smooth, and fruit-forward. Silky tannins with lush flavors of ripe plum, blackberry, blueberry, and mocha.", pairings: ["Shakshuka", "Spicy Calabrese Flatbread", "Breakfast Burrito"], tags: ["Bold", "Rich", "Full-Bodied", "Smooth", "Fruity"], scales: { body: 4, acidity: 3, fruit: 5, tannins: 3 }, hook: "Named after a tractor John Shafer used when developing his vineyards. A tribute to the hard work of farming." },
+    { id: 28, name: "Gaja Ca’Marcanda Promis Toscana IGT", type: "Red", grape: "Merlot", availability: "By bottle only", region: "Tuscany, Italy", grapes: "Merlot, Syrah, Sangiovese", taste: "Medium to full-bodied with polished tannins. A juicy, modern Italian style with notes of black cherry, blackberry, and licorice.", pairings: ["Breakfast Burrito", "Smashed Avocado BLT", "Ham and Cheese Croissant", "Crab Cake Benny"], tags: ["Medium-Bodied", "Smooth", "Fruity", "Earthy", "Spicy", "Italian"], scales: { body: 4, acidity: 4, fruit: 4, tannins: 3 }, hook: "From Angelo Gaja, a legendary producer who revolutionized Italian wine. This 'Super Tuscan' blends French grapes with Italian soul." }
 ];
+const foodMenu = ["Breakfast Burrito", "Chicken and Artichoke Soup", "Coastal Chickpea and Salmon", "Crab Cake Benny", "French Style Omelet", "Green Goddess", "Ham and Cheese Croissant", "Heirloom Tomato Burrata", "Mahi and Meyer Lemon Sandwich", "Modern Caesar Salad", "Modern Caesar with Salmon", "Orchard Chicken Salad Croissant", "Shakshuka", "Smashed Avocado BLT", "Smoked Salmon Plate", "Spicy Calabrese Flatbread", "Sun Kissed Pancakes", "Vanilla Yogurt and Granola Bowl", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad"];
+const allTags = [...new Set(wineData.flatMap(w => w.tags))].sort();
 
+// State Management
+let eightySixedWines = JSON.parse(localStorage.getItem('eightySixedWines')) || [];
+const is86d = (id) => eightySixedWines.includes(id);
 
-// ===================================================================================
-// ===== JAVASCRIPT LOGIC =====
-// ===================================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Universal Navigation ---
-    function setupNav(navSelector, contentSelector, sectionClass) {
-        const navBtns = document.querySelectorAll(navSelector);
-        const contents = document.querySelectorAll(contentSelector);
-        navBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                navBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                contents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === btn.dataset.target) {
-                        content.classList.add('active');
-                        // Special triggers for quiz generation
-                        if (content.id === 'quiz-tool') generateQuiz();
-                    }
-                });
-            });
-        });
+function toggle86(id) {
+    if (is86d(id)) {
+        eightySixedWines = eightySixedWines.filter(wineId => wineId !== id);
+    } else {
+        eightySixedWines.push(id);
     }
-    setupNav('.main-nav-btn', '.content-section');
-    setupNav('#study-sub-nav .sub-nav-btn', '#study-section .tool-content');
-    setupNav('#service-sub-nav .sub-nav-btn', '#service-section .tool-content');
+    localStorage.setItem('eightySixedWines', JSON.stringify(eightySixedWines));
+    renderAll();
+}
 
-    // --- Flashcard Logic ---
-    let currentCardIndex = 0;
-    const flashcard = document.getElementById('flashcard');
-    const frontContent = document.getElementById('flashcard-front-content');
-    const backContent = document.getElementById('flashcard-back-content');
-    const prevBtn = document.getElementById('prev-card');
-    const nextBtn = document.getElementById('next-card');
-    const cardCounter = document.getElementById('card-counter');
+function renderAll() {
+    // Re-render components that depend on 86'd status
+    generateFlashcards();
+    updateFilteredResults();
+    if(document.querySelector('.food-card.selected')){
+        document.querySelector('.food-card.selected').click();
+    }
+    renderVisualExplorerWineList();
+    if(document.querySelector('.group-btn.active')){
+         document.querySelector('.group-btn.active').click();
+    }
+}
 
-    function updateFlashcard() {
-        const wine = wineData[currentCardIndex];
-        frontContent.textContent = wine.name;
-        backContent.innerHTML = `
-            <h3>Details</h3>
-            <p><strong>Region:</strong> ${wine.region}</p>
+// ===== RENDER FUNCTIONS =====
+function generateFlashcards() {
+    const container = document.getElementById('flashcard-container');
+    if (!container) return;
+    container.innerHTML = wineData.map(wine => `
+        <div class="wine-card ${is86d(wine.id) ? 'eighty-sixed' : ''}">
+            <h3>
+                <span>${wine.name}</span>
+                <label for="eightsix-${wine.id}" class="eightsix-toggle" title="Mark as 86'd">
+                    <input type="checkbox" id="eightsix-${wine.id}" ${is86d(wine.id) ? 'checked' : ''} onclick="toggle86(${wine.id})">
+                    <span class="slider"></span>
+                </label>
+            </h3>
+            <p><strong>Type:</strong> ${wine.type} | <strong>Region:</strong> ${wine.region}</p>
             <p><strong>Grapes:</strong> ${wine.grapes}</p>
-            <p><strong>Availability:</strong> ${wine.availability}</p>
-            <h3>Taste Profile</h3><p>${wine.taste}</p>
-            <h3>Aromatic Profile</h3><p>${wine.aroma}</p>
-            <h3>Food Pairings</h3><ul>${wine.pairings.map(p => `<li>${p}</li>`).join('')}</ul>
-            ${wine.note ? `<p class="note">${wine.note}</p>` : ''}
-        `;
-        cardCounter.textContent = `${currentCardIndex + 1} / ${wineData.length}`;
-        flashcard.classList.remove('is-flipped');
-    }
+            <p><strong>Profile:</strong> ${wine.taste}</p>
+            ${wine.hook ? `<p class="hook-note">${wine.hook}</p>` : ''}
+        </div>
+    `).join('');
+}
 
-    if (flashcard) {
-        flashcard.addEventListener('click', () => flashcard.classList.toggle('is-flipped'));
-        prevBtn.addEventListener('click', () => {
-            currentCardIndex = (currentCardIndex - 1 + wineData.length) % wineData.length;
-            updateFlashcard();
-        });
-        nextBtn.addEventListener('click', () => {
-            currentCardIndex = (currentCardIndex + 1) % wineData.length;
-            updateFlashcard();
-        });
-    }
-
-    // --- Quiz Logic ---
+function generateQuiz() {
     const quizContainer = document.getElementById('quiz-container');
-    const submitQuizBtn = document.getElementById('submit-quiz-btn');
-    const quizResultsContainer = document.getElementById('quiz-results');
+    const resultsContainer = document.getElementById('quiz-results');
+    if (!quizContainer) return;
 
-    function generateQuiz() {
-        if (!quizContainer) return;
-        quizContainer.innerHTML = '';
-        quizResultsContainer.innerHTML = '';
-        const questions = generateQuizQuestions(5);
-
-        questions.forEach((q, index) => {
-            const questionEl = document.createElement('div');
-            questionEl.classList.add('quiz-question');
-            questionEl.innerHTML = `
-                <p>${index + 1}. ${q.question}</p>
-                <div class="quiz-options" data-correct-answer="${q.answer}">
-                    ${q.options.map((opt, i) => `
-                        <label>
-                            <input type="radio" name="q${index}" value="${opt}">
-                            <span>${opt}</span>
-                        </label>
-                    `).join('')}
-                </div>
-                <div class="result-feedback"></div>`;
-            quizContainer.appendChild(questionEl);
-        });
+    quizContainer.innerHTML = '';
+    resultsContainer.innerHTML = '';
+    let questions = [];
+    const availableWines = wineData.filter(w => !is86d(w.id));
+    if(availableWines.length < 4) {
+        quizContainer.innerHTML = "<p>Not enough available wines to generate a quiz!</p>";
+        return;
     }
 
-    if (submitQuizBtn) {
-        submitQuizBtn.addEventListener('click', () => {
-            let score = 0;
-            const allQuestions = quizContainer.querySelectorAll('.quiz-options');
-            allQuestions.forEach((questionDiv, index) => {
-                const correctAnswer = questionDiv.dataset.correctAnswer;
-                const selected = questionDiv.querySelector(`input[name="q${index}"]:checked`);
-                const feedbackEl = questionDiv.nextElementSibling;
-                if(selected) {
-                    if(selected.value === correctAnswer) {
-                        score++;
-                        feedbackEl.textContent = 'Correct!';
-                        feedbackEl.style.color = 'var(--success-color)';
-                    } else {
-                        feedbackEl.innerHTML = `Incorrect. The correct answer is: <strong>${correctAnswer}</strong>`;
-                        feedbackEl.style.color = 'var(--error-color)';
-                    }
-                } else {
-                    feedbackEl.innerHTML = `No answer selected. Correct: <strong>${correctAnswer}</strong>`;
-                    feedbackEl.style.color = 'var(--error-color)';
-                }
-            });
-            quizResultsContainer.textContent = `You scored ${score} out of ${allQuestions.length}!`;
-        });
-    }
-
-    function generateQuizQuestions(num) {
-        let questions = [];
-        const shuffledWines = [...wineData].sort(() => 0.5 - Math.random());
-        for (let i = 0; i < num; i++) {
-            const wine = shuffledWines[i];
-            const type = Math.floor(Math.random() * 3); // 0: Region, 1: Grapes, 2: Pairing
-            let q, a, opts;
-            switch(type) {
-                case 1:
-                    q = `What are the primary grapes in ${wine.name}?`;
-                    a = wine.grapes;
-                    opts = getOptions(a, wineData.map(w => w.grapes));
-                    break;
-                case 2:
-                    const pairing = wine.pairings[Math.floor(Math.random() * wine.pairings.length)];
-                    q = `Which of these wines pairs best with ${pairing}?`;
-                    a = wine.name;
-                    opts = getOptions(a, wineData.map(w => w.name));
-                    break;
-                default:
-                    q = `Which region is ${wine.name} from?`;
-                    a = wine.region;
-                    opts = getOptions(a, wineData.map(w => w.region));
-                    break;
-            }
-            questions.push({ question: q, answer: a, options: opts });
-        }
-        return questions;
-    }
-
-    function getOptions(correctAnswer, allOptions) {
-        const options = new Set([correctAnswer]);
-        const distinctOptions = [...new Set(allOptions.filter(o => o !== correctAnswer))];
-        while (options.size < 4 && distinctOptions.length > 0) {
-            options.add(distinctOptions.splice(Math.floor(Math.random() * distinctOptions.length), 1)[0]);
-        }
-        return [...options].sort(() => 0.5 - Math.random());
-    }
-
-    // --- Visuals Logic ---
-    function generateVisuals() {
-        const whiteBodyChart = document.getElementById('white-body-chart');
-        const redTanninChart = document.getElementById('red-tannin-chart');
-        if (!whiteBodyChart || !redTanninChart) return;
-        whiteBodyChart.innerHTML = '';
-        redTanninChart.innerHTML = '';
-        
-        const bodyScale = { 'Light': 33, 'Medium': 66, 'Full': 100 };
-        const whitesAndRose = wineData.filter(w => w.type === 'White' || w.type === 'Rosé').sort((a,b) => bodyScale[a.body] - bodyScale[b.body]);
-        whitesAndRose.forEach(wine => {
-            if(!wine.body) return;
-            whiteBodyChart.innerHTML += `
-                <div class="bar-chart-item">
-                    <div class="bar-label" title="${wine.name}">${wine.name}</div>
-                    <div class="bar-wrapper"><div class="bar" style="width: ${bodyScale[wine.body]}%;">${wine.body}</div></div>
-                </div>`;
-        });
-        
-        const tanninScale = { 'Soft': 33, 'Medium': 66, 'Structured': 85, 'Firm': 100 };
-        const reds = wineData.filter(w => w.type === 'Red').sort((a,b) => tanninScale[a.tannins] - tanninScale[b.tannins]);
-         reds.forEach(wine => {
-            if(!wine.tannins) return;
-            redTanninChart.innerHTML += `
-                <div class="bar-chart-item">
-                    <div class="bar-label" title="${wine.name}">${wine.name}</div>
-                    <div class="bar-wrapper"><div class="bar" style="width: ${tanninScale[wine.tannins]}%; background: linear-gradient(90deg, #c62828, #880e4f);">${wine.tannins}</div></div>
-                </div>`;
-        });
-    }
-
-    // --- Recommender Logic ---
-    const filterContainer = document.getElementById('filter-container');
-    const filterResults = document.getElementById('filter-results');
+    // Question Types
+    // 1: Pairing, 2: Comparative, 3: Guess the Wine
+    const questionTypes = [1, 2, 3, 1, 2];
     
-    function initializeRecommender() {
-        if (!filterContainer) return;
-        const allTags = [...new Set(wineData.flatMap(w => w.tags))].sort();
-        filterContainer.innerHTML = `
-            <div class="filter-group">
-                <div class="filter-tags">
-                ${allTags.map(tag => `
-                    <input type="checkbox" id="tag-${tag.replace(/\s+/g, '-')}" value="${tag}" class="filter-checkbox">
-                    <label for="tag-${tag.replace(/\s+/g, '-')}">${tag}</label>
-                `).join('')}
+    questions = questionTypes.map(type => {
+        const wine = availableWines[Math.floor(Math.random() * availableWines.length)];
+        if (type === 1) { // Pairing
+            const pairing = wine.pairings[Math.floor(Math.random() * wine.pairings.length)];
+            return {
+                question: `A guest orders the <strong>${pairing}</strong>. Which wine is a great recommendation?`,
+                answer: wine.name,
+                options: getOptions(wine.name, availableWines.map(w => w.name))
+            };
+        }
+        if (type === 2) { // Comparative
+            const comparisonType = ['most', 'least'][Math.floor(Math.random()*2)];
+            const scaleType = ['acidity', 'body', 'fruit', 'tannins'][Math.floor(Math.random()*4)];
+            if(scaleType === 'tannins' && wine.type !== 'Red') { // fallback for non-reds
+                 return {
+                    question: `Which of these wines is the most <strong>fruit-forward</strong>?`,
+                    answer: [...availableWines].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name,
+                    options: getOptions([...availableWines].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name, availableWines.map(w=>w.name))
+                }
+            }
+             const sortedWines = [...availableWines].filter(w => w.scales[scaleType]).sort((a, b) => comparisonType === 'most' ? b.scales[scaleType] - a.scales[scaleType] : a.scales[scaleType] - b.scales[scaleType]);
+             const correctWine = sortedWines[0];
+
+            return {
+                question: `Which of these wines is the <strong>${comparisonType} ${scaleType}</strong>?`,
+                answer: correctWine.name,
+                options: getOptions(correctWine.name, availableWines.map(w => w.name))
+            }
+        }
+        if (type === 3) { // Guess the Wine
+            return {
+                question: `I'm looking for a wine from <strong>${wine.region}</strong> with notes of <strong>${wine.tags.slice(0,2).join(', ')}</strong>. What am I?`,
+                answer: wine.name,
+                options: getOptions(wine.name, availableWines.map(w => w.name))
+            };
+        }
+    });
+
+    quizContainer.innerHTML = questions.map((q, index) => `
+        <div class="quiz-question">
+            <p>${index + 1}. ${q.question}</p>
+            <div class="quiz-options" data-correct-answer="${q.answer}">
+                ${q.options.map(opt => `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    let submitted = false;
+    function handleSubmit() {
+        if(submitted) return;
+        submitted = true;
+        let score = 0;
+        quizContainer.querySelectorAll('.quiz-options').forEach((qDiv, i) => {
+            const selected = qDiv.querySelector(`input[name="q${i}"]:checked`);
+            if(selected && selected.value === qDiv.dataset.correctAnswer) {
+                score++;
+                selected.parentElement.style.borderLeftColor = 'var(--success-color)';
+                selected.parentElement.style.fontWeight = 'bold';
+            } else if (selected) {
+                 selected.parentElement.style.borderLeftColor = 'var(--error-color)';
+            }
+        });
+        resultsContainer.innerHTML = `You scored ${score} out of 5.`;
+    }
+    // Automatically submit when the last question is answered
+    quizContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const answeredCount = quizContainer.querySelectorAll('input[type="radio"]:checked').length;
+            if (answeredCount === 5) {
+                handleSubmit();
+            }
+        });
+    });
+}
+function getOptions(correctAnswer, allOptions) {
+    const options = new Set([correctAnswer]);
+    const distinctOptions = [...new Set(allOptions.filter(o => o !== correctAnswer))];
+    while (options.size < 4 && distinctOptions.length > 0) {
+        options.add(distinctOptions.splice(Math.floor(Math.random() * distinctOptions.length), 1)[0]);
+    }
+    return [...options].sort(() => 0.5 - Math.random());
+}
+
+// Visuals
+let selectedVisualWine = null;
+function renderVisualExplorerWineList() {
+    const container = document.getElementById('visual-wine-list');
+    if (!container) return;
+    container.innerHTML = wineData.map(wine => `
+        <div class="wine-item ${is86d(wine.id) ? 'eighty-sixed' : ''} ${selectedVisualWine === wine.id ? 'selected' : ''}" data-id="${wine.id}">
+            ${wine.name}
+        </div>
+    `).join('');
+
+    container.querySelectorAll('.wine-item:not(.eighty-sixed)').forEach(item => {
+        item.addEventListener('click', () => {
+            selectedVisualWine = parseInt(item.dataset.id);
+            renderVisualExplorerWineList(); // re-render to show selection
+            renderSpectrumCharts();
+        });
+    });
+}
+function renderSpectrumCharts() {
+    const container = document.getElementById('spectrum-charts-container');
+    if (!container) return;
+    const wine = wineData.find(w => w.id === selectedVisualWine);
+    const charts = [
+        { title: 'Body', legend: ['Light', 'Full'], key: 'body' },
+        { title: 'Acidity', legend: ['Mellow', 'Sharp'], key: 'acidity' },
+        { title: 'Fruit vs. Earth', legend: ['Earthy/Mineral', 'Fruit-Forward'], key: 'fruit' },
+        { title: 'Tannins (Reds)', legend: ['Soft', 'Firm'], key: 'tannins' },
+    ];
+    container.innerHTML = charts.map(chart => {
+        if (!wine || !wine.scales[chart.key]) return '';
+        const width = (wine.scales[chart.key] / 5) * 100;
+        return `
+            <div class="spectrum-chart">
+                <h4>${chart.title}</h4>
+                <div class="spectrum-bar-container">
+                    <div class="spectrum-bar" style="width: ${width}%"></div>
                 </div>
-            </div>`;
-        
-        const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
-        filterCheckboxes.forEach(box => box.addEventListener('change', updateFilteredResults));
+                <div class="spectrum-legend">
+                    <span>${chart.legend[0]}</span>
+                    <span>${chart.legend[1]}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+function generateComparativeGroupings() {
+    const btnContainer = document.getElementById('group-buttons-container');
+    const contentContainer = document.getElementById('comparison-container');
+    if(!btnContainer) return;
+    
+    const mainGrapes = [...new Set(wineData.map(w => w.grape))];
+    btnContainer.innerHTML = mainGrapes.map(g => `<button class="group-btn" data-grape="${g}">${g}</button>`).join('');
+
+    btnContainer.querySelectorAll('.group-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btnContainer.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const grape = btn.dataset.grape;
+            const wines = wineData.filter(w => w.grape === grape && !is86d(w.id));
+            contentContainer.innerHTML = wines.map(wine => `
+                <div class="comparison-card">
+                     <h4>${wine.name} (${wine.region})</h4>
+                     <ul>
+                        <li><strong>Style:</strong> ${wine.taste}</li>
+                        ${wine.hook ? `<li><strong>Hook:</strong> ${wine.hook}</li>` : ''}
+                     </ul>
+                </div>
+            `).join('');
+        });
+    });
+}
+
+// Service Mode
+function initializeRecommender() {
+    const container = document.getElementById('filter-container');
+    if(!container) return;
+    container.innerHTML = `<div class="filter-tags">${allTags.map(tag => `
+        <input type="checkbox" id="tag-${tag}" value="${tag}" class="filter-checkbox">
+        <label for="tag-${tag}">${tag}</label>
+    `).join('')}</div>`;
+
+    container.querySelectorAll('.filter-checkbox').forEach(box => box.addEventListener('change', updateFilteredResults));
+}
+function updateFilteredResults() {
+    const container = document.getElementById('filter-results');
+    if(!container) return;
+    const selectedTags = [...document.querySelectorAll('.filter-checkbox:checked')].map(box => box.value);
+
+    if (selectedTags.length === 0) {
+        container.innerHTML = '<p>Select tags to see recommendations.</p>';
+        return;
     }
 
-    function updateFilteredResults() {
-        const selectedTags = [...document.querySelectorAll('.filter-checkbox:checked')].map(box => box.value);
-        if (selectedTags.length === 0) {
-            filterResults.innerHTML = '<p>Select one or more tags above to see matching wines.</p>';
-            return;
-        }
-        const filteredWines = wineData.filter(wine => selectedTags.every(tag => wine.tags.includes(tag)));
+    const availableWines = wineData.filter(w => !is86d(w.id));
+    const results = availableWines.map(wine => {
+        const matches = selectedTags.filter(tag => wine.tags.includes(tag));
+        const score = matches.length / selectedTags.length;
+        const mismatches = selectedTags.filter(tag => !wine.tags.includes(tag));
+        return { ...wine, score, matches, mismatches };
+    }).filter(wine => wine.score > 0).sort((a,b) => b.score - a.score);
 
-        if(filteredWines.length === 0) {
-            filterResults.innerHTML = '<p>No wines match that specific combination. Try removing a filter.</p>';
-            return;
-        }
-        
-        filterResults.innerHTML = filteredWines.map(wine => `
-            <div class="wine-card">
-                <h4>${wine.name}</h4>
-                <p><strong>${wine.type} from ${wine.region}</strong></p>
-                <p><strong>Profile:</strong> ${wine.taste}</p>
-                ${wine.note ? `<p class="note">${wine.note}</p>` : ''}
-            </div>`).join('');
+    if (results.length === 0) {
+        container.innerHTML = '<p>No wines match that criteria.</p>';
+        return;
     }
 
-    // --- Food Pairing Logic ---
-    const foodMenuContainer = document.getElementById('food-menu-container');
-    const pairingResultsContainer = document.getElementById('pairing-results');
+    container.innerHTML = results.map(wine => `
+        <div class="wine-card match-card ${wine.score === 1 ? 'perfect' : 'partial'}">
+            <h4>${wine.name}</h4>
+            <p class="match-details">Match: ${Math.round(wine.score * 100)}%</p>
+            ${wine.mismatches.length > 0 ? `<p class="match-details mismatch">Doesn't match: ${wine.mismatches.join(', ')}</p>` : ''}
+            <p><strong>Profile:</strong> ${wine.taste}</p>
+        </div>
+    `).join('');
+}
+function initializeFoodPairing() {
+    const container = document.getElementById('food-menu-container');
+    const resultsContainer = document.getElementById('pairing-results');
+    if(!container) return;
+    
+    container.innerHTML = foodMenu.map(item => `<div class="food-card" data-food="${item}">${item}</div>`).join('');
+    
+    container.querySelectorAll('.food-card').forEach(card => {
+        card.addEventListener('click', () => {
+            container.querySelectorAll('.food-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            const food = card.dataset.food;
+            let pairings = wineData.filter(w => !is86d(w.id) && w.pairings.includes(food));
+            let specialNote = '';
+            
+            if (food === 'Modern Caesar Salad') {
+                const salmonWines = wineData.filter(w => !is86d(w.id) && w.pairings.includes('Modern Caesar with Salmon'));
+                pairings = [...new Set([...pairings, ...salmonWines])]; // Combine and remove duplicates
+                specialNote = `<div class="special-note"><strong>Note:</strong> If salmon is added, the <strong>${salmonWines.map(w=>w.name).join(' or ')}</strong> are particularly excellent choices.</div>`;
+            }
 
-    function initializeFoodPairing() {
-        if (!foodMenuContainer) return;
-        const allMenuItems = [...new Set(wineData.flatMap(w => w.pairings))].sort();
-        foodMenuContainer.innerHTML = allMenuItems.map(item => `
-            <div class="food-card" data-food-item="${item}"><h3>${item}</h3></div>`).join('');
-        
-        foodMenuContainer.querySelectorAll('.food-card').forEach(card => {
-            card.addEventListener('click', () => {
-                // visual selection
-                foodMenuContainer.querySelectorAll('.food-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
+            if(pairings.length === 0) {
+                 resultsContainer.innerHTML = `<h3>No recommended pairings for ${food}.</h3>`;
+                 return;
+            }
 
-                const foodItem = card.dataset.foodItem;
-                const pairedWines = wineData.filter(wine => wine.pairings.includes(foodItem));
-                
-                pairingResultsContainer.innerHTML = `
-                    <h3>Best Pairings for: <strong>${foodItem}</strong></h3>
-                    <div class="results-grid">
-                        ${pairedWines.map(wine => `
-                            <div class="wine-card">
-                                <h4>${wine.name}</h4>
-                                <p><strong>${wine.type} from ${wine.region}</strong></p>
-                                <p><strong>Why it works:</strong> ${wine.taste}</p>
-                                ${wine.note ? `<p class="note">${wine.note}</p>` : ''}
-                            </div>`).join('')}
-                    </div>`;
-                pairingResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            resultsContainer.innerHTML = `
+                <h3>Pairings for ${food}</h3>
+                ${specialNote}
+                ${pairings.map(wine => `
+                     <div class="wine-card">
+                        <h4>${wine.name}</h4>
+                        <p><strong>Why it works:</strong> ${wine.taste}</p>
+                     </div>
+                `).join('')}
+            `;
+        });
+    });
+}
+
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    // Nav
+    const mainNavs = document.querySelectorAll('.main-nav-btn');
+    const mainSections = document.querySelectorAll('.content-section');
+    mainNavs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            mainNavs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            mainSections.forEach(s => s.classList.remove(s.id === btn.dataset.target ? 'inactive' : 'active'));
+            mainSections.forEach(s => s.style.display = 'none');
+            const targetSection = document.getElementById(btn.dataset.target);
+            targetSection.style.display = 'block';
+            targetSection.classList.add('active');
+        });
+    });
+    document.querySelector('.main-nav-btn.active').click(); // trigger initial view
+
+    function setupSubNav(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if(!container) return;
+        const subNavs = container.querySelectorAll('.sub-nav-btn');
+        const subContents = container.querySelectorAll(':scope > .tool-content');
+        subNavs.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                subNavs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                subContents.forEach(s => s.classList.remove('active'));
+                document.getElementById(btn.dataset.target).classList.add('active');
             });
         });
     }
+    setupSubNav('#study-section .tool-container');
+    setupSubNav('#visuals-tool');
+    setupSubNav('#service-section .tool-container');
 
-    // --- Initial Load ---
-    updateFlashcard();
-    generateVisuals();
+    // Init functions
+    generateFlashcards();
+    generateQuiz();
+    document.getElementById('new-quiz-btn').addEventListener('click', generateQuiz);
+    
+    renderVisualExplorerWineList();
+    renderSpectrumCharts();
+    generateComparativeGroupings();
+    
     initializeRecommender();
     initializeFoodPairing();
-    if(document.querySelector('.sub-nav-btn[data-target="quiz-tool"]')) {
-      document.querySelector('.sub-nav-btn[data-target="quiz-tool"]').addEventListener('click', generateQuiz);
-    }
 });
 </script>
 
 </body>
-</html>```
+</html>
