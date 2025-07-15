@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wine Tool v2.0</title>
+    <title>Wine Tool v2.0 (Stable)</title>
     <style>
         :root {
             --bg-color: #f8f7f2; /* Sandy Off-White */
@@ -119,50 +119,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
             margin-bottom: 15px;
         }
-        .wine-card.eighty-sixed {
-            opacity: 0.5;
-            background-color: var(--light-gray);
-            text-decoration: line-through;
-        }
         .wine-card h4 { margin-top: 0; }
-
-        /* 86d Toggle */
-        .eightsix-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            color: var(--error-color);
-        }
-        .eightsix-toggle input { display: none; }
-        .eightsix-toggle .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 22px;
-        }
-        .eightsix-toggle .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 22px;
-        }
-        .eightsix-toggle .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        .eightsix-toggle input:checked + .slider { background-color: var(--error-color); }
-        .eightsix-toggle input:checked + .slider:before { transform: translateX(18px); }
 
         /* Flashcards */
         #flashcard-container { display: grid; gap: 15px; }
@@ -187,6 +144,7 @@
         .spectrum-analyzer, .comparative-groupings { margin-top: 20px; }
         .spectrum-chart { margin-bottom: 25px; }
         .spectrum-chart h4 { text-align: center; margin-bottom: 10px; }
+        .spectrum-bar-container { background-color: var(--light-gray); border-radius: 5px; }
         .spectrum-bar {
             height: 25px;
             background: linear-gradient(90deg, #3498db, #9b59b6);
@@ -372,46 +330,13 @@ const wineData = [
 const foodMenu = ["Breakfast Burrito", "Chicken and Artichoke Soup", "Coastal Chickpea and Salmon", "Crab Cake Benny", "French Style Omelet", "Green Goddess", "Ham and Cheese Croissant", "Heirloom Tomato Burrata", "Mahi and Meyer Lemon Sandwich", "Modern Caesar Salad", "Modern Caesar with Salmon", "Orchard Chicken Salad Croissant", "Shakshuka", "Smashed Avocado BLT", "Smoked Salmon Plate", "Spicy Calabrese Flatbread", "Sun Kissed Pancakes", "Vanilla Yogurt and Granola Bowl", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad"];
 const allTags = [...new Set(wineData.flatMap(w => w.tags))].sort();
 
-// State Management
-let eightySixedWines = JSON.parse(localStorage.getItem('eightySixedWines')) || [];
-const is86d = (id) => eightySixedWines.includes(id);
-
-function toggle86(id) {
-    if (is86d(id)) {
-        eightySixedWines = eightySixedWines.filter(wineId => wineId !== id);
-    } else {
-        eightySixedWines.push(id);
-    }
-    localStorage.setItem('eightySixedWines', JSON.stringify(eightySixedWines));
-    renderAll();
-}
-
-function renderAll() {
-    // Re-render components that depend on 86'd status
-    generateFlashcards();
-    updateFilteredResults();
-    if(document.querySelector('.food-card.selected')){
-        document.querySelector('.food-card.selected').click();
-    }
-    renderVisualExplorerWineList();
-    if(document.querySelector('.group-btn.active')){
-         document.querySelector('.group-btn.active').click();
-    }
-}
-
 // ===== RENDER FUNCTIONS =====
 function generateFlashcards() {
     const container = document.getElementById('flashcard-container');
     if (!container) return;
     container.innerHTML = wineData.map(wine => `
-        <div class="wine-card ${is86d(wine.id) ? 'eighty-sixed' : ''}">
-            <h3>
-                <span>${wine.name}</span>
-                <label for="eightsix-${wine.id}" class="eightsix-toggle" title="Mark as 86'd">
-                    <input type="checkbox" id="eightsix-${wine.id}" ${is86d(wine.id) ? 'checked' : ''} onclick="toggle86(${wine.id})">
-                    <span class="slider"></span>
-                </label>
-            </h3>
+        <div class="wine-card">
+            <h3>${wine.name}</h3>
             <p><strong>Type:</strong> ${wine.type} | <strong>Region:</strong> ${wine.region}</p>
             <p><strong>Grapes:</strong> ${wine.grapes}</p>
             <p><strong>Profile:</strong> ${wine.taste}</p>
@@ -428,24 +353,21 @@ function generateQuiz() {
     quizContainer.innerHTML = '';
     resultsContainer.innerHTML = '';
     let questions = [];
-    const availableWines = wineData.filter(w => !is86d(w.id));
-    if(availableWines.length < 4) {
+    if(wineData.length < 4) {
         quizContainer.innerHTML = "<p>Not enough available wines to generate a quiz!</p>";
         return;
     }
 
-    // Question Types
-    // 1: Pairing, 2: Comparative, 3: Guess the Wine
-    const questionTypes = [1, 2, 3, 1, 2];
+    const questionTypes = [1, 2, 3, 1, 2].sort(() => 0.5 - Math.random());
     
     questions = questionTypes.map(type => {
-        const wine = availableWines[Math.floor(Math.random() * availableWines.length)];
+        const wine = wineData[Math.floor(Math.random() * wineData.length)];
         if (type === 1) { // Pairing
             const pairing = wine.pairings[Math.floor(Math.random() * wine.pairings.length)];
             return {
                 question: `A guest orders the <strong>${pairing}</strong>. Which wine is a great recommendation?`,
                 answer: wine.name,
-                options: getOptions(wine.name, availableWines.map(w => w.name))
+                options: getOptions(wine.name, wineData.map(w => w.name))
             };
         }
         if (type === 2) { // Comparative
@@ -454,24 +376,24 @@ function generateQuiz() {
             if(scaleType === 'tannins' && wine.type !== 'Red') { // fallback for non-reds
                  return {
                     question: `Which of these wines is the most <strong>fruit-forward</strong>?`,
-                    answer: [...availableWines].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name,
-                    options: getOptions([...availableWines].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name, availableWines.map(w=>w.name))
+                    answer: [...wineData].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name,
+                    options: getOptions([...wineData].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name, wineData.map(w=>w.name))
                 }
             }
-             const sortedWines = [...availableWines].filter(w => w.scales[scaleType]).sort((a, b) => comparisonType === 'most' ? b.scales[scaleType] - a.scales[scaleType] : a.scales[scaleType] - b.scales[scaleType]);
+             const sortedWines = [...wineData].filter(w => w.scales[scaleType]).sort((a, b) => comparisonType === 'most' ? b.scales[scaleType] - a.scales[scaleType] : a.scales[scaleType] - b.scales[scaleType]);
              const correctWine = sortedWines[0];
 
             return {
                 question: `Which of these wines is the <strong>${comparisonType} ${scaleType}</strong>?`,
                 answer: correctWine.name,
-                options: getOptions(correctWine.name, availableWines.map(w => w.name))
+                options: getOptions(correctWine.name, wineData.map(w => w.name))
             }
         }
         if (type === 3) { // Guess the Wine
             return {
                 question: `I'm looking for a wine from <strong>${wine.region}</strong> with notes of <strong>${wine.tags.slice(0,2).join(', ')}</strong>. What am I?`,
                 answer: wine.name,
-                options: getOptions(wine.name, availableWines.map(w => w.name))
+                options: getOptions(wine.name, wineData.map(w => w.name))
             };
         }
     });
@@ -502,7 +424,6 @@ function generateQuiz() {
         });
         resultsContainer.innerHTML = `You scored ${score} out of 5.`;
     }
-    // Automatically submit when the last question is answered
     quizContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.addEventListener('change', () => {
             const answeredCount = quizContainer.querySelectorAll('input[type="radio"]:checked').length;
@@ -527,15 +448,15 @@ function renderVisualExplorerWineList() {
     const container = document.getElementById('visual-wine-list');
     if (!container) return;
     container.innerHTML = wineData.map(wine => `
-        <div class="wine-item ${is86d(wine.id) ? 'eighty-sixed' : ''} ${selectedVisualWine === wine.id ? 'selected' : ''}" data-id="${wine.id}">
+        <div class="wine-item ${selectedVisualWine === wine.id ? 'selected' : ''}" data-id="${wine.id}">
             ${wine.name}
         </div>
     `).join('');
 
-    container.querySelectorAll('.wine-item:not(.eighty-sixed)').forEach(item => {
+    container.querySelectorAll('.wine-item').forEach(item => {
         item.addEventListener('click', () => {
             selectedVisualWine = parseInt(item.dataset.id);
-            renderVisualExplorerWineList(); // re-render to show selection
+            renderVisualExplorerWineList();
             renderSpectrumCharts();
         });
     });
@@ -550,8 +471,12 @@ function renderSpectrumCharts() {
         { title: 'Fruit vs. Earth', legend: ['Earthy/Mineral', 'Fruit-Forward'], key: 'fruit' },
         { title: 'Tannins (Reds)', legend: ['Soft', 'Firm'], key: 'tannins' },
     ];
+    if (!wine) {
+        container.innerHTML = "<p>Select a wine above to see its spectrum analysis.</p>";
+        return;
+    }
     container.innerHTML = charts.map(chart => {
-        if (!wine || !wine.scales[chart.key]) return '';
+        if (!wine.scales[chart.key]) return '';
         const width = (wine.scales[chart.key] / 5) * 100;
         return `
             <div class="spectrum-chart">
@@ -580,7 +505,7 @@ function generateComparativeGroupings() {
             btnContainer.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const grape = btn.dataset.grape;
-            const wines = wineData.filter(w => w.grape === grape && !is86d(w.id));
+            const wines = wineData.filter(w => w.grape === grape);
             contentContainer.innerHTML = wines.map(wine => `
                 <div class="comparison-card">
                      <h4>${wine.name} (${wine.region})</h4>
@@ -590,6 +515,7 @@ function generateComparativeGroupings() {
                      </ul>
                 </div>
             `).join('');
+            if(wines.length === 0) contentContainer.innerHTML = "<p>No wines match this grape.</p>";
         });
     });
 }
@@ -615,8 +541,7 @@ function updateFilteredResults() {
         return;
     }
 
-    const availableWines = wineData.filter(w => !is86d(w.id));
-    const results = availableWines.map(wine => {
+    const results = wineData.map(wine => {
         const matches = selectedTags.filter(tag => wine.tags.includes(tag));
         const score = matches.length / selectedTags.length;
         const mismatches = selectedTags.filter(tag => !wine.tags.includes(tag));
@@ -649,12 +574,12 @@ function initializeFoodPairing() {
             container.querySelectorAll('.food-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             const food = card.dataset.food;
-            let pairings = wineData.filter(w => !is86d(w.id) && w.pairings.includes(food));
+            let pairings = wineData.filter(w => w.pairings.includes(food));
             let specialNote = '';
             
             if (food === 'Modern Caesar Salad') {
-                const salmonWines = wineData.filter(w => !is86d(w.id) && w.pairings.includes('Modern Caesar with Salmon'));
-                pairings = [...new Set([...pairings, ...salmonWines])]; // Combine and remove duplicates
+                const salmonWines = wineData.filter(w => w.pairings.includes('Modern Caesar with Salmon'));
+                pairings = [...new Set([...pairings, ...salmonWines])];
                 specialNote = `<div class="special-note"><strong>Note:</strong> If salmon is added, the <strong>${salmonWines.map(w=>w.name).join(' or ')}</strong> are particularly excellent choices.</div>`;
             }
 
@@ -686,27 +611,28 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             mainNavs.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            mainSections.forEach(s => s.classList.remove(s.id === btn.dataset.target ? 'inactive' : 'active'));
+            mainSections.forEach(s => s.classList.remove('active'));
             mainSections.forEach(s => s.style.display = 'none');
             const targetSection = document.getElementById(btn.dataset.target);
             targetSection.style.display = 'block';
             targetSection.classList.add('active');
         });
     });
-    document.querySelector('.main-nav-btn.active').click(); // trigger initial view
+    document.querySelector('.main-nav-btn.active').click();
 
     function setupSubNav(containerSelector) {
         const container = document.querySelector(containerSelector);
         if(!container) return;
         const subNavs = container.querySelectorAll('.sub-nav-btn');
-        const subContents = container.querySelectorAll(':scope > .tool-content');
+        const toolContents = container.querySelectorAll(':scope > .tool-content');
         subNavs.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 subNavs.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                subContents.forEach(s => s.classList.remove('active'));
-                document.getElementById(btn.dataset.target).classList.add('active');
+                toolContents.forEach(s => s.classList.remove('active'));
+                const targetContent = document.getElementById(btn.dataset.target)
+                if (targetContent) targetContent.classList.add('active');
             });
         });
     }
