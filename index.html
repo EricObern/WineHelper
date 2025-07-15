@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wine Tool v2.0 (Stable)</title>
+    <title>Sommelier's Assistant</title>
     <style>
         :root {
             --bg-color: #f8f7f2; /* Sandy Off-White */
             --text-color: #2c3e50; /* Dark Slate Blue */
-            --primary-color: #3498db; /* Bright Sky Blue */
-            --secondary-color: #9b59b6; /* Muted Purple as accent */
+            --primary-color: #0077b6; /* Professional Blue */
             --accent-color: #e67e22; /* Warm Orange for highlights */
             --light-gray: #ecf0f1;
-            --medium-gray: #bdc3c7;
             --card-bg: #ffffff;
             --shadow-color: rgba(44, 62, 80, 0.15);
             --success-color: #27ae60;
             --error-color: #c0392b;
         }
 
+        /* --- Base & Typography --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
@@ -26,50 +25,50 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 16px;
+            line-height: 1.6;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
-        h1, h2, h3, h4 { color: var(--text-color); }
+        h1, h2, h3, h4 { color: var(--text-color); margin-top: 0; }
+        h2 { margin-bottom: 20px; }
+        p { margin-top: 0; }
+        strong { color: #34495e; }
 
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- Layout & Navigation --- */
         header {
             background-color: var(--card-bg);
             padding: 20px 15px;
             text-align: center;
             box-shadow: 0 2px 8px var(--shadow-color);
-            border-bottom: 3px solid var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
         }
         header h1 { margin: 0; font-size: 2em; }
-
         .main-nav {
             display: flex;
-            justify-content: center;
             margin: 20px 0;
-            background-color: var(--card-bg);
             border-radius: 12px;
+            overflow: hidden;
             box-shadow: 0 2px 4px var(--shadow-color);
-            padding: 8px;
-            gap: 8px;
         }
         .main-nav-btn {
-            padding: 12px 10px;
+            padding: 15px 10px;
             border: none;
-            background-color: transparent;
+            background-color: var(--light-gray);
             color: var(--primary-color);
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-radius: 8px;
             flex-grow: 1;
             text-align: center;
         }
         .main-nav-btn.active {
             background-color: var(--primary-color);
             color: var(--card-bg);
-            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
         }
-
-        .content-section { display: none; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .content-section { display: none; animation: fadeIn 0.4s; }
         .content-section.active { display: block; }
 
         .tool-container { padding: 20px; background-color: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 6px var(--shadow-color); }
@@ -84,97 +83,92 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        .sub-nav-btn:hover { background-color: var(--light-gray); }
         .sub-nav-btn.active { background-color: var(--primary-color); color: var(--card-bg); }
-
         .tool-content { display: none; }
-        .tool-content.active { display: block; animation: fadeIn 0.4s; }
+        .tool-content.active { display: block; }
 
-        /* Generic Components */
+        /* --- Reusable Components --- */
         .button {
-            padding: 12px 24px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: var(--accent-color);
-            color: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            margin-top: 15px;
-            box-sizing: border-box;
-            text-align: center;
+            padding: 12px 24px; font-size: 1.1em; font-weight: bold; cursor: pointer;
+            background-color: var(--accent-color); color: var(--card-bg);
+            border: none; border-radius: 8px; transition: background-color 0.3s;
+            display: block; width: 100%; margin-top: 15px; box-sizing: border-box; text-align: center;
         }
         .button:hover { background-color: #d35400; }
-        
         .wine-card {
-            background: var(--card-bg);
-            border: 1px solid var(--light-gray);
-            border-left: 5px solid var(--primary-color);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 15px;
+            background: var(--card-bg); border: 1px solid var(--light-gray);
+            border-left: 5px solid var(--primary-color); border-radius: 8px;
+            padding: 15px; box-shadow: 0 2px 5px var(--shadow-color); margin-bottom: 15px;
         }
-        .wine-card h4 { margin-top: 0; }
+        .hook-note { font-style: italic; color: #555; margin-top: 10px; padding: 10px; background-color: #fcfcfc; border-left: 3px solid var(--light-gray); }
 
-        /* Flashcards */
+        /* --- Study Mode: Flashcards --- */
         #flashcard-container { display: grid; gap: 15px; }
-        .flashcard-item h3 { display: flex; justify-content: space-between; align-items: center; }
-
-        /* Quiz */
-        .quiz-question { margin-bottom: 20px; }
-        .quiz-question p { font-weight: bold; font-size: 1.1em; }
-        .quiz-options label {
-            display: block;
-            margin: 8px 0;
-            padding: 12px;
-            background: var(--light-gray);
-            border-radius: 8px;
-            cursor: pointer;
-            border-left: 5px solid transparent;
+        .flashcard-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            border-top: 1px solid var(--light-gray);
+            margin-top: 10px;
+            padding-top: 0;
         }
-        .quiz-options label:hover { border-left: 5px solid var(--primary-color); }
-        #quiz-results { margin-top: 20px; font-size: 1.2em; font-weight: bold; text-align: center; }
+        .flashcard-details.visible { max-height: 500px; padding-top: 10px; }
+        .details-toggle-btn {
+            background: var(--light-gray); border: none; padding: 8px 12px;
+            border-radius: 5px; font-weight: bold; cursor: pointer;
+        }
 
-        /* Visual Explorer */
-        .spectrum-analyzer, .comparative-groupings { margin-top: 20px; }
-        .spectrum-chart { margin-bottom: 25px; }
-        .spectrum-chart h4 { text-align: center; margin-bottom: 10px; }
+        /* --- Study Mode: Smart Quiz --- */
+        .quiz-question { margin-bottom: 20px; padding: 15px; border: 1px solid var(--light-gray); border-radius: 8px; }
+        .quiz-options label {
+            display: block; margin: 8px 0; padding: 12px;
+            background: var(--light-gray); border-radius: 8px;
+            cursor: pointer; border-left: 5px solid transparent; transition: all 0.2s ease;
+        }
+        .quiz-options label.correct { border-color: var(--success-color); background-color: #eafaf1; font-weight: bold; }
+        .quiz-options label.incorrect { border-color: var(--error-color); background-color: #fbeeeead; }
+        #quiz-results { margin-top: 20px; padding: 15px; font-size: 1.2em; font-weight: bold; text-align: center; border-radius: 8px;}
+        #quiz-results.success { background-color: #eafaf1; color: var(--success-color); }
+        #quiz-results.failure { background-color: #fbeeeead; color: var(--error-color); }
+
+        /* --- Study Mode: Visual Explorer --- */
+        #visual-wine-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .wine-plot-item {
+            padding: 5px 10px;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .wine-plot-item.selected { background-color: var(--accent-color); color: white; }
+        .spectrum-chart { margin-bottom: 20px; }
+        .spectrum-chart h4 { text-align: center; margin-bottom: 8px; font-size: 1em; }
         .spectrum-bar-container { background-color: var(--light-gray); border-radius: 5px; }
         .spectrum-bar {
             height: 25px;
-            background: linear-gradient(90deg, #3498db, #9b59b6);
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
             border-radius: 5px;
-            width: 0; /* Animated with JS */
-            transition: width 0.8s ease-out;
-            position: relative;
+            width: 0;
+            transition: width 0.6s ease-out;
         }
-        .spectrum-legend { display: flex; justify-content: space-between; font-size: 0.8em; font-weight: 500; }
-        .wine-plot-list .wine-item {
-            padding: 8px; cursor: pointer; border-radius: 5px; margin-bottom: 5px;
-        }
-        .wine-plot-list .wine-item:hover { background-color: var(--light-gray); }
-        .wine-plot-list .wine-item.selected { background-color: var(--accent-color); color: white; }
-
+        .spectrum-legend { display: flex; justify-content: space-between; font-size: 0.8em; font-weight: 500; padding: 0 5px;}
         .group-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .group-btn {
-             padding: 8px 15px; border: 1px solid var(--primary-color);
-             background-color: var(--card-bg); color: var(--primary-color);
-             border-radius: 20px; cursor: pointer; font-weight: 500;
+            padding: 8px 15px; border: 1px solid var(--primary-color);
+            background-color: var(--card-bg); color: var(--primary-color);
+            border-radius: 20px; cursor: pointer; font-weight: 500;
         }
         .group-btn.active { background-color: var(--primary-color); color: var(--card-bg); }
         .comparison-grid { display: grid; gap: 15px; }
         .comparison-card { padding: 15px; background: var(--light-gray); border-radius: 8px; }
-        .comparison-card h4 { margin: 0 0 10px 0; }
-        .comparison-card ul { margin: 0; padding-left: 20px; }
-        .comparison-card ul li { margin-bottom: 5px; }
 
-        /* Service Mode */
-        .filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        /* --- Service Mode --- */
+        .filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
         .filter-tags label {
             padding: 8px 15px; background-color: var(--light-gray);
             border-radius: 20px; cursor: pointer; user-select: none; transition: all 0.2s ease;
@@ -183,39 +177,31 @@
         .filter-tags input:checked + label {
             background-color: var(--primary-color); color: var(--card-bg); box-shadow: 0 1px 3px var(--shadow-color);
         }
-        .recommender-results .match-card { margin-bottom: 15px; border-left: 5px solid var(--success-color); }
-        .recommender-results .match-card.partial { border-left-color: var(--accent-color); }
-        .match-card h4 { margin: 0 0 10px 0; }
-        .match-details { font-weight: bold; }
-        .match-details.mismatch { color: var(--error-color); }
-        
-        .food-pairing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .match-card ul { margin: 10px 0 0 0; padding-left: 20px; }
+        .match-card li.match { color: var(--success-color); }
+        .match-card li.mismatch { color: var(--error-color); }
+
+        .food-pairing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
         .food-card {
             padding: 15px; text-align: center; font-weight: bold; background-color: var(--card-bg);
             border-radius: 8px; box-shadow: 0 1px 3px var(--shadow-color); cursor: pointer;
             border: 1px solid var(--light-gray); transition: all 0.2s ease;
         }
         .food-card:hover, .food-card.selected {
-            transform: translateY(-3px);
-            box-shadow: 0 3px 8px var(--shadow-color);
-            background-color: var(--primary-color);
-            color: var(--card-bg);
+            transform: translateY(-3px); box-shadow: 0 3px 8px var(--shadow-color);
+            background-color: var(--primary-color); color: var(--card-bg);
         }
         #pairing-results .special-note {
-            background-color: #fef9e7;
-            border-left: 4px solid var(--accent-color);
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 4px;
+            background-color: #eafaf1; border-left: 4px solid var(--success-color);
+            padding: 10px; margin: 15px 0; border-radius: 4px;
         }
-        .hook-note { font-style: italic; color: #555; margin-top: 10px; }
-
+        .pairing-reason { font-style: italic; background-color: #f8f9fa; padding: 8px; border-radius: 5px; margin-top: 8px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Wine Service Tool</h1>
+        <h1>Sommelier's Assistant</h1>
     </header>
 
     <div class="container">
@@ -225,7 +211,9 @@
         </nav>
 
         <main>
-            <!-- STUDY SECTION -->
+            <!-- ===================== -->
+            <!-- ===== STUDY MODE ==== -->
+            <!-- ===================== -->
             <section id="study-section" class="content-section active">
                 <div class="tool-container">
                     <nav class="sub-nav">
@@ -234,19 +222,22 @@
                         <button class="sub-nav-btn" data-target="visuals-tool">Visual Explorer</button>
                     </nav>
 
+                    <!-- Flashcards Tool -->
                     <div id="flashcards-tool" class="tool-content active">
                         <h2>Flashcards</h2>
                         <div id="flashcard-container"></div>
                     </div>
 
+                    <!-- Smart Quiz Tool -->
                     <div id="quiz-tool" class="tool-content">
                         <h2>Smart Quiz</h2>
-                        <p>A new 5-question quiz is generated each time you click the "New Quiz" button.</p>
+                        <p>A new 5-question quiz is generated each time. Get instant feedback on your answers.</p>
                         <div id="quiz-container"></div>
                         <div id="quiz-results"></div>
                         <button id="new-quiz-btn" class="button">New Quiz</button>
                     </div>
 
+                    <!-- Visual Explorer Tool -->
                     <div id="visuals-tool" class="tool-content">
                         <nav class="sub-nav">
                             <button class="sub-nav-btn active" data-target="spectrum-analyzer">Spectrum Analyzer</button>
@@ -255,8 +246,8 @@
                         <div id="spectrum-analyzer" class="tool-content active">
                             <h3>Spectrum Analyzer</h3>
                             <p>Select a wine to see where it falls on each spectrum.</p>
-                            <div id="visual-wine-list" class="wine-plot-list"></div>
-                            <div id="spectrum-charts-container"></div>
+                            <div id="visual-wine-list"></div>
+                            <div id="spectrum-charts-container"><p>Select a wine above to begin.</p></div>
                         </div>
                         <div id="comparative-groupings" class="tool-content">
                              <h3>Comparative Groupings</h3>
@@ -268,7 +259,9 @@
                 </div>
             </section>
 
-            <!-- SERVICE SECTION -->
+            <!-- ======================= -->
+            <!-- ===== SERVICE MODE ==== -->
+            <!-- ======================= -->
             <section id="service-section" class="content-section">
                  <div class="tool-container">
                     <nav class="sub-nav">
@@ -276,17 +269,19 @@
                         <button class="sub-nav-btn" data-target="pairing-tool">Food Pairing Guide</button>
                     </nav>
 
+                    <!-- Recommender Tool -->
                     <div id="recommender-tool" class="tool-content active">
                         <h2>Intelligent Recommender</h2>
-                        <p>Select tags based on your guest's preferences.</p>
+                        <p>Select tags based on your guest's preferences to get scored recommendations.</p>
                         <div id="filter-container"></div>
                         <h3>Recommendations</h3>
-                        <div class="recommender-results" id="filter-results"></div>
+                        <div id="filter-results"><p>Select tags to see recommendations.</p></div>
                     </div>
 
+                    <!-- Food Pairing Tool -->
                     <div id="pairing-tool" class="tool-content">
                         <h2>Food Pairing Guide</h2>
-                        <p>Select a menu item to see ideal pairings.</p>
+                        <p>Select a menu item to see ideal pairings and why they work.</p>
                         <div id="food-menu-container" class="food-pairing-grid"></div>
                         <div id="pairing-results"></div>
                     </div>
@@ -296,12 +291,15 @@
     </div>
 
 <script>
-// ===== DATA =====
+// ===================================================================================
+// ===== PART 1: SOURCE OF TRUTH (DATA) ==============================================
+// ===================================================================================
+
 const wineData = [
-    { id: 1, name: "Giavi DOCG Rosé Prosecco", type: "Sparkling", availability: "Bottle only", region: "Veneto, Italy", grapes: "Glera, Pinot Noir", taste: "Light-bodied, crisp, dry. Notes of red berries (wild strawberry, raspberry) with bright citrus freshness and a hint of rose petals.", pairings: ["Wine Country Sangria Salad", "Heirloom Tomato Burrata", "Watermelon Seasonal Fruit bowl", "Vanilla Yogurt and Granola Bowl"], tags: ["Light", "Crisp", "Bubbly", "Fruity", "Refreshing"], scales: { body: 2, acidity: 4, fruit: 4 }, hook: "A high-quality DOCG Prosecco, meaning the grapes come from the best, steepest hills in the region." },
-    { id: 2, name: "Bisol Jeio Brut Prosecco", type: "Sparkling", availability: "By glass or by bottle", region: "Valdobbiadene, Veneto, Italy", grapes: "Glera", taste: "Crisp and clean with vibrant acidity. Dominated by pear, green apple, and citrus with a smooth, dry finish.", pairings: ["Modern Caesar Salad", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad", "Green Goddess"], tags: ["Light", "Crisp", "Bubbly", "Dry", "Orchard Fruit"], scales: { body: 2, acidity: 4, fruit: 3 }, hook: "From a family that has been making wine in the heart of Valdobbiadene for 21 generations." },
-    { id: 3, name: "Allimant-Laugner Crémant d'Alsace Brut", type: "Sparkling", availability: "By glass or by bottle", region: "Alsace, France", grapes: "Pinot Blanc, Auxerrois, Riesling", taste: "Elegant and refined with a creamy texture. Flavors of green apple, pear, and a distinct note of brioche or freshly baked bread.", pairings: ["Smoked Salmon Plate", "French Style Omelet", "Modern Caesar Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Elegant", "Creamy", "Bubbly", "Toasty", "Dry"], scales: { body: 3, acidity: 4, fruit: 2 }, hook: "Crémant is France's answer to high-quality sparkling wine outside of Champagne, often offering incredible value." },
-    { id: 4, name: "Taittinger Brut La Française Champagne", type: "Sparkling", availability: "By glass and by Bottle", region: "Champagne, France", grapes: "Chardonnay, Pinot Noir, Pinot Meunier", taste: "Medium-bodied and perfectly balanced. Flavors of apple, peach, and toasted brioche with a creamy, persistent mousse.", pairings: ["Crab Cake Benny", "Ham and Cheese Croissant", "French Style Omelet", "Heirloom Tomato Burrata"], tags: ["Classic", "Creamy", "Bubbly", "Toasty", "Elegant", "Rich"], scales: { body: 3, acidity: 4, fruit: 3 }, hook: "A benchmark non-vintage Champagne, known for its high percentage of Chardonnay, giving it elegance and finesse." },
+    { id: 1, name: "Giavi DOCG Rosé Prosecco", type: "Sparkling", grape: "Glera", region: "Veneto, Italy", grapes: "Glera, Pinot Noir", taste: "Light-bodied, crisp, dry. Notes of red berries (wild strawberry, raspberry) with bright citrus freshness and a hint of rose petals.", pairings: ["Wine Country Sangria Salad", "Heirloom Tomato Burrata", "Watermelon Seasonal Fruit bowl", "Vanilla Yogurt and Granola Bowl"], tags: ["Light", "Crisp", "Bubbly", "Fruity", "Refreshing"], scales: { body: 2, acidity: 4, fruit: 4 }, hook: "A high-quality DOCG Prosecco, meaning the grapes come from the best, steepest hills in the region." },
+    { id: 2, name: "Bisol Jeio Brut Prosecco", type: "Sparkling", grape: "Glera", region: "Valdobbiadene, Veneto, Italy", grapes: "Glera", taste: "Crisp and clean with vibrant acidity. Dominated by pear, green apple, and citrus with a smooth, dry finish.", pairings: ["Modern Caesar Salad", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad", "Green Goddess"], tags: ["Light", "Crisp", "Bubbly", "Dry", "Orchard Fruit"], scales: { body: 2, acidity: 4, fruit: 3 }, hook: "From a family that has been making wine in the heart of Valdobbiadene for 21 generations." },
+    { id: 3, name: "Allimant-Laugner Crémant d'Alsace Brut", type: "Sparkling", grape: "Pinot Blanc", region: "Alsace, France", grapes: "Pinot Blanc, Auxerrois, Riesling", taste: "Elegant and refined with a creamy texture. Flavors of green apple, pear, and a distinct note of brioche or freshly baked bread.", pairings: ["Smoked Salmon Plate", "French Style Omelet", "Modern Caesar Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Elegant", "Creamy", "Bubbly", "Toasty", "Dry"], scales: { body: 3, acidity: 4, fruit: 2 }, hook: "Crémant is France's answer to high-quality sparkling wine outside of Champagne, often offering incredible value." },
+    { id: 4, name: "Taittinger Brut La Française Champagne", type: "Sparkling", grape: "Chardonnay", region: "Champagne, France", grapes: "Chardonnay, Pinot Noir, Pinot Meunier", taste: "Medium-bodied and perfectly balanced. Flavors of apple, peach, and toasted brioche with a creamy, persistent mousse.", pairings: ["Crab Cake Benny", "Ham and Cheese Croissant", "French Style Omelet", "Heirloom Tomato Burrata"], tags: ["Classic", "Creamy", "Bubbly", "Toasty", "Elegant", "Rich"], scales: { body: 3, acidity: 4, fruit: 3 }, hook: "A benchmark non-vintage Champagne, known for its high percentage of Chardonnay, giving it elegance and finesse." },
     { id: 5, name: "Sea Cove Sauvignon Blanc", type: "White", grape: "Sauvignon Blanc", region: "Marlborough, New Zealand", taste: "Light-bodied and zesty with high, refreshing acidity. Pungent notes of passionfruit, grapefruit, lime, and fresh-cut grass.", pairings: ["Smoked Salmon Plate", "Coastal Chickpea and Salmon", "Wine Country Sangria Salad", "Mahi and Meyer Lemon Sandwich"], tags: ["Light", "Crisp", "Zesty", "Grassy", "Refreshing", "Tropical"], scales: { body: 2, acidity: 5, fruit: 5 }, hook: "A classic, unmistakable example of Marlborough Sauvignon Blanc, the style that put New Zealand on the world wine map." },
     { id: 6, name: "Hourglass Sauvignon Blanc", type: "White", grape: "Sauvignon Blanc", region: "Napa Valley, California", grapes: "91% Sauvignon Blanc, 9% Sémillon", taste: "Medium-bodied with a richer, rounder texture from the Sémillon. Notes of white peach, melon, and lemongrass with a hint of creaminess.", pairings: ["Mahi and Meyer Lemon Sandwich", "Green Goddess", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Medium-Bodied", "Rich", "Fruity", "Elegant", "Creamy"], scales: { body: 3, acidity: 4, fruit: 4 }, hook: "The small addition of Sémillon gives this a richer texture, setting it apart from grassy styles. Think more lush and less zesty." },
     { id: 7, name: "Daniel Reverdy Sancerre", type: "White", grape: "Sauvignon Blanc", region: "Loire Valley, France", taste: "Light to medium-bodied, bone-dry with chiseled minerality. Flavors of lime, flint, wet stone, and subtle white flowers.", pairings: ["Modern Caesar Salad", "French Style Omelet", "Wine Country Sangria Salad", "Heirloom Tomato Burrata"], tags: ["Light", "Crisp", "Dry", "Mineral", "Elegant", "Flinty"], scales: { body: 2, acidity: 5, fruit: 2 }, hook: "Sancerre is the French blueprint for Sauvignon Blanc. It's all about minerality and elegance over powerful fruit." },
@@ -330,325 +328,269 @@ const wineData = [
 const foodMenu = ["Breakfast Burrito", "Chicken and Artichoke Soup", "Coastal Chickpea and Salmon", "Crab Cake Benny", "French Style Omelet", "Green Goddess", "Ham and Cheese Croissant", "Heirloom Tomato Burrata", "Mahi and Meyer Lemon Sandwich", "Modern Caesar Salad", "Modern Caesar with Salmon", "Orchard Chicken Salad Croissant", "Shakshuka", "Smashed Avocado BLT", "Smoked Salmon Plate", "Spicy Calabrese Flatbread", "Sun Kissed Pancakes", "Vanilla Yogurt and Granola Bowl", "Watermelon Seasonal Fruit bowl", "Wine Country Sangria Salad"];
 const allTags = [...new Set(wineData.flatMap(w => w.tags))].sort();
 
-// ===== RENDER FUNCTIONS =====
-function generateFlashcards() {
-    const container = document.getElementById('flashcard-container');
-    if (!container) return;
-    container.innerHTML = wineData.map(wine => `
-        <div class="wine-card">
-            <h3>${wine.name}</h3>
-            <p><strong>Type:</strong> ${wine.type} | <strong>Region:</strong> ${wine.region}</p>
-            <p><strong>Grapes:</strong> ${wine.grapes}</p>
-            <p><strong>Profile:</strong> ${wine.taste}</p>
-            ${wine.hook ? `<p class="hook-note">${wine.hook}</p>` : ''}
-        </div>
-    `).join('');
-}
-
-function generateQuiz() {
-    const quizContainer = document.getElementById('quiz-container');
-    const resultsContainer = document.getElementById('quiz-results');
-    if (!quizContainer) return;
-
-    quizContainer.innerHTML = '';
-    resultsContainer.innerHTML = '';
-    let questions = [];
-    if(wineData.length < 4) {
-        quizContainer.innerHTML = "<p>Not enough available wines to generate a quiz!</p>";
-        return;
-    }
-
-    const questionTypes = [1, 2, 3, 1, 2].sort(() => 0.5 - Math.random());
-    
-    questions = questionTypes.map(type => {
-        const wine = wineData[Math.floor(Math.random() * wineData.length)];
-        if (type === 1) { // Pairing
-            const pairing = wine.pairings[Math.floor(Math.random() * wine.pairings.length)];
-            return {
-                question: `A guest orders the <strong>${pairing}</strong>. Which wine is a great recommendation?`,
-                answer: wine.name,
-                options: getOptions(wine.name, wineData.map(w => w.name))
-            };
-        }
-        if (type === 2) { // Comparative
-            const comparisonType = ['most', 'least'][Math.floor(Math.random()*2)];
-            const scaleType = ['acidity', 'body', 'fruit', 'tannins'][Math.floor(Math.random()*4)];
-            if(scaleType === 'tannins' && wine.type !== 'Red') { // fallback for non-reds
-                 return {
-                    question: `Which of these wines is the most <strong>fruit-forward</strong>?`,
-                    answer: [...wineData].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name,
-                    options: getOptions([...wineData].sort((a,b) => b.scales.fruit - a.scales.fruit)[0].name, wineData.map(w=>w.name))
-                }
-            }
-             const sortedWines = [...wineData].filter(w => w.scales[scaleType]).sort((a, b) => comparisonType === 'most' ? b.scales[scaleType] - a.scales[scaleType] : a.scales[scaleType] - b.scales[scaleType]);
-             const correctWine = sortedWines[0];
-
-            return {
-                question: `Which of these wines is the <strong>${comparisonType} ${scaleType}</strong>?`,
-                answer: correctWine.name,
-                options: getOptions(correctWine.name, wineData.map(w => w.name))
-            }
-        }
-        if (type === 3) { // Guess the Wine
-            return {
-                question: `I'm looking for a wine from <strong>${wine.region}</strong> with notes of <strong>${wine.tags.slice(0,2).join(', ')}</strong>. What am I?`,
-                answer: wine.name,
-                options: getOptions(wine.name, wineData.map(w => w.name))
-            };
-        }
-    });
-
-    quizContainer.innerHTML = questions.map((q, index) => `
-        <div class="quiz-question">
-            <p>${index + 1}. ${q.question}</p>
-            <div class="quiz-options" data-correct-answer="${q.answer}">
-                ${q.options.map(opt => `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label>`).join('')}
-            </div>
-        </div>
-    `).join('');
-
-    let submitted = false;
-    function handleSubmit() {
-        if(submitted) return;
-        submitted = true;
-        let score = 0;
-        quizContainer.querySelectorAll('.quiz-options').forEach((qDiv, i) => {
-            const selected = qDiv.querySelector(`input[name="q${i}"]:checked`);
-            if(selected && selected.value === qDiv.dataset.correctAnswer) {
-                score++;
-                selected.parentElement.style.borderLeftColor = 'var(--success-color)';
-                selected.parentElement.style.fontWeight = 'bold';
-            } else if (selected) {
-                 selected.parentElement.style.borderLeftColor = 'var(--error-color)';
-            }
-        });
-        resultsContainer.innerHTML = `You scored ${score} out of 5.`;
-    }
-    quizContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', () => {
-            const answeredCount = quizContainer.querySelectorAll('input[type="radio"]:checked').length;
-            if (answeredCount === 5) {
-                handleSubmit();
-            }
-        });
-    });
-}
-function getOptions(correctAnswer, allOptions) {
-    const options = new Set([correctAnswer]);
-    const distinctOptions = [...new Set(allOptions.filter(o => o !== correctAnswer))];
-    while (options.size < 4 && distinctOptions.length > 0) {
-        options.add(distinctOptions.splice(Math.floor(Math.random() * distinctOptions.length), 1)[0]);
-    }
-    return [...options].sort(() => 0.5 - Math.random());
-}
-
-// Visuals
-let selectedVisualWine = null;
-function renderVisualExplorerWineList() {
-    const container = document.getElementById('visual-wine-list');
-    if (!container) return;
-    container.innerHTML = wineData.map(wine => `
-        <div class="wine-item ${selectedVisualWine === wine.id ? 'selected' : ''}" data-id="${wine.id}">
-            ${wine.name}
-        </div>
-    `).join('');
-
-    container.querySelectorAll('.wine-item').forEach(item => {
-        item.addEventListener('click', () => {
-            selectedVisualWine = parseInt(item.dataset.id);
-            renderVisualExplorerWineList();
-            renderSpectrumCharts();
-        });
-    });
-}
-function renderSpectrumCharts() {
-    const container = document.getElementById('spectrum-charts-container');
-    if (!container) return;
-    const wine = wineData.find(w => w.id === selectedVisualWine);
-    const charts = [
-        { title: 'Body', legend: ['Light', 'Full'], key: 'body' },
-        { title: 'Acidity', legend: ['Mellow', 'Sharp'], key: 'acidity' },
-        { title: 'Fruit vs. Earth', legend: ['Earthy/Mineral', 'Fruit-Forward'], key: 'fruit' },
-        { title: 'Tannins (Reds)', legend: ['Soft', 'Firm'], key: 'tannins' },
-    ];
-    if (!wine) {
-        container.innerHTML = "<p>Select a wine above to see its spectrum analysis.</p>";
-        return;
-    }
-    container.innerHTML = charts.map(chart => {
-        if (!wine.scales[chart.key]) return '';
-        const width = (wine.scales[chart.key] / 5) * 100;
-        return `
-            <div class="spectrum-chart">
-                <h4>${chart.title}</h4>
-                <div class="spectrum-bar-container">
-                    <div class="spectrum-bar" style="width: ${width}%"></div>
-                </div>
-                <div class="spectrum-legend">
-                    <span>${chart.legend[0]}</span>
-                    <span>${chart.legend[1]}</span>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-function generateComparativeGroupings() {
-    const btnContainer = document.getElementById('group-buttons-container');
-    const contentContainer = document.getElementById('comparison-container');
-    if(!btnContainer) return;
-    
-    const mainGrapes = [...new Set(wineData.map(w => w.grape))];
-    btnContainer.innerHTML = mainGrapes.map(g => `<button class="group-btn" data-grape="${g}">${g}</button>`).join('');
-
-    btnContainer.querySelectorAll('.group-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btnContainer.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const grape = btn.dataset.grape;
-            const wines = wineData.filter(w => w.grape === grape);
-            contentContainer.innerHTML = wines.map(wine => `
-                <div class="comparison-card">
-                     <h4>${wine.name} (${wine.region})</h4>
-                     <ul>
-                        <li><strong>Style:</strong> ${wine.taste}</li>
-                        ${wine.hook ? `<li><strong>Hook:</strong> ${wine.hook}</li>` : ''}
-                     </ul>
-                </div>
-            `).join('');
-            if(wines.length === 0) contentContainer.innerHTML = "<p>No wines match this grape.</p>";
-        });
-    });
-}
-
-// Service Mode
-function initializeRecommender() {
-    const container = document.getElementById('filter-container');
-    if(!container) return;
-    container.innerHTML = `<div class="filter-tags">${allTags.map(tag => `
-        <input type="checkbox" id="tag-${tag}" value="${tag}" class="filter-checkbox">
-        <label for="tag-${tag}">${tag}</label>
-    `).join('')}</div>`;
-
-    container.querySelectorAll('.filter-checkbox').forEach(box => box.addEventListener('change', updateFilteredResults));
-}
-function updateFilteredResults() {
-    const container = document.getElementById('filter-results');
-    if(!container) return;
-    const selectedTags = [...document.querySelectorAll('.filter-checkbox:checked')].map(box => box.value);
-
-    if (selectedTags.length === 0) {
-        container.innerHTML = '<p>Select tags to see recommendations.</p>';
-        return;
-    }
-
-    const results = wineData.map(wine => {
-        const matches = selectedTags.filter(tag => wine.tags.includes(tag));
-        const score = matches.length / selectedTags.length;
-        const mismatches = selectedTags.filter(tag => !wine.tags.includes(tag));
-        return { ...wine, score, matches, mismatches };
-    }).filter(wine => wine.score > 0).sort((a,b) => b.score - a.score);
-
-    if (results.length === 0) {
-        container.innerHTML = '<p>No wines match that criteria.</p>';
-        return;
-    }
-
-    container.innerHTML = results.map(wine => `
-        <div class="wine-card match-card ${wine.score === 1 ? 'perfect' : 'partial'}">
-            <h4>${wine.name}</h4>
-            <p class="match-details">Match: ${Math.round(wine.score * 100)}%</p>
-            ${wine.mismatches.length > 0 ? `<p class="match-details mismatch">Doesn't match: ${wine.mismatches.join(', ')}</p>` : ''}
-            <p><strong>Profile:</strong> ${wine.taste}</p>
-        </div>
-    `).join('');
-}
-function initializeFoodPairing() {
-    const container = document.getElementById('food-menu-container');
-    const resultsContainer = document.getElementById('pairing-results');
-    if(!container) return;
-    
-    container.innerHTML = foodMenu.map(item => `<div class="food-card" data-food="${item}">${item}</div>`).join('');
-    
-    container.querySelectorAll('.food-card').forEach(card => {
-        card.addEventListener('click', () => {
-            container.querySelectorAll('.food-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            const food = card.dataset.food;
-            let pairings = wineData.filter(w => w.pairings.includes(food));
-            let specialNote = '';
-            
-            if (food === 'Modern Caesar Salad') {
-                const salmonWines = wineData.filter(w => w.pairings.includes('Modern Caesar with Salmon'));
-                pairings = [...new Set([...pairings, ...salmonWines])];
-                specialNote = `<div class="special-note"><strong>Note:</strong> If salmon is added, the <strong>${salmonWines.map(w=>w.name).join(' or ')}</strong> are particularly excellent choices.</div>`;
-            }
-
-            if(pairings.length === 0) {
-                 resultsContainer.innerHTML = `<h3>No recommended pairings for ${food}.</h3>`;
-                 return;
-            }
-
-            resultsContainer.innerHTML = `
-                <h3>Pairings for ${food}</h3>
-                ${specialNote}
-                ${pairings.map(wine => `
-                     <div class="wine-card">
-                        <h4>${wine.name}</h4>
-                        <p><strong>Why it works:</strong> ${wine.taste}</p>
-                     </div>
-                `).join('')}
-            `;
-        });
-    });
-}
-
-// Initial Load
+// ===================================================================================
+// ===== PART 2: APPLICATION LOGIC ===================================================
+// ===================================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Nav
-    const mainNavs = document.querySelectorAll('.main-nav-btn');
-    const mainSections = document.querySelectorAll('.content-section');
-    mainNavs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            mainNavs.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            mainSections.forEach(s => s.classList.remove('active'));
-            mainSections.forEach(s => s.style.display = 'none');
-            const targetSection = document.getElementById(btn.dataset.target);
-            targetSection.style.display = 'block';
-            targetSection.classList.add('active');
-        });
-    });
-    document.querySelector('.main-nav-btn.active').click();
 
-    function setupSubNav(containerSelector) {
-        const container = document.querySelector(containerSelector);
-        if(!container) return;
-        const subNavs = container.querySelectorAll('.sub-nav-btn');
-        const toolContents = container.querySelectorAll(':scope > .tool-content');
-        subNavs.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                subNavs.forEach(b => b.classList.remove('active'));
+    // --- Core Navigation ---
+    function setupNav(navSelector, contentSelector, callback) {
+        const navBtns = document.querySelectorAll(navSelector);
+        const contents = document.querySelectorAll(contentSelector);
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                toolContents.forEach(s => s.classList.remove('active'));
-                const targetContent = document.getElementById(btn.dataset.target)
-                if (targetContent) targetContent.classList.add('active');
+                contents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === btn.dataset.target) {
+                        content.classList.add('active');
+                    }
+                });
+                if (callback) callback(btn.dataset.target);
             });
         });
     }
-    setupSubNav('#study-section .tool-container');
-    setupSubNav('#visuals-tool');
-    setupSubNav('#service-section .tool-container');
 
-    // Init functions
-    generateFlashcards();
+    // --- Study Mode: Flashcards ---
+    function renderFlashcards() {
+        const container = document.getElementById('flashcard-container');
+        if (!container) return;
+        container.innerHTML = wineData.map(wine => `
+            <div class="wine-card">
+                <h4>${wine.name}</h4>
+                <button class="details-toggle-btn" data-id="${wine.id}">Show Details</button>
+                <div class="flashcard-details" id="details-${wine.id}">
+                    <p><strong>Region:</strong> ${wine.region}</p>
+                    <p><strong>Grapes:</strong> ${wine.grapes}</p>
+                    <p><strong>Taste Profile:</strong> ${wine.taste}</p>
+                    ${wine.hook ? `<p class="hook-note">${wine.hook}</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+
+        container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('details-toggle-btn')) {
+                const id = e.target.dataset.id;
+                const details = document.getElementById(`details-${id}`);
+                details.classList.toggle('visible');
+                e.target.textContent = details.classList.contains('visible') ? 'Hide Details' : 'Show Details';
+            }
+        });
+    }
+
+    // --- Study Mode: Smart Quiz ---
+    function generateQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('quiz-results');
+        if (!quizContainer) return;
+
+        quizContainer.innerHTML = '';
+        resultsContainer.innerHTML = '';
+        resultsContainer.className = 'quiz-results';
+        let correctCount = 0;
+
+        const questionTypes = [1, 2, 3, 1, 2].sort(() => 0.5 - Math.random());
+        const questions = questionTypes.map(type => {
+            let wine = wineData[Math.floor(Math.random() * wineData.length)];
+            if (type === 1) { // Pairing
+                let pairing = wine.pairings[Math.floor(Math.random() * wine.pairings.length)];
+                return { q: `A guest orders the <strong>${pairing}</strong>. Which wine is a great recommendation?`, a: wine.name, o: getOptions(wine.name) };
+            }
+            if (type === 2) { // Comparative
+                let comp = ['most', 'least'][Math.floor(Math.random()*2)];
+                let scale = ['acidity', 'body', 'fruit', 'tannins'][Math.floor(Math.random()*4)];
+                let sorted = [...wineData].filter(w => w.scales[scale]).sort((a,b) => comp === 'most' ? b.scales[scale] - a.scales[scale] : a.scales[scale] - b.scales[scale]);
+                let correctWine = sorted.length ? sorted[0] : wineData[0];
+                return { q: `Which of these wines is the <strong>${comp} ${scale}</strong>?`, a: correctWine.name, o: getOptions(correctWine.name) };
+            }
+            // type 3: Guess the wine
+            return { q: `I'm looking for a wine from <strong>${wine.region}</strong> with notes of <strong>${wine.tags.slice(0,2).join(', ')}</strong>. What am I?`, a: wine.name, o: getOptions(wine.name) };
+        });
+
+        quizContainer.innerHTML = questions.map((q, i) => `
+            <div class="quiz-question" id="q-${i}">
+                <p>${i + 1}. ${q.q}</p>
+                <div class="quiz-options">${q.o.map(opt => `<label data-answer="${q.a}"><input type="radio" name="q${i}" value="${opt}"> ${opt}</label>`).join('')}</div>
+            </div>`).join('');
+
+        quizContainer.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const questionDiv = e.target.closest('.quiz-options');
+                const correctAnswer = questionDiv.querySelector('label').dataset.answer;
+                const chosenAnswer = e.target.value;
+                
+                // Disable all inputs for this question
+                questionDiv.querySelectorAll('input').forEach(input => input.disabled = true);
+                
+                if (chosenAnswer === correctAnswer) {
+                    correctCount++;
+                    e.target.parentElement.classList.add('correct');
+                } else {
+                    e.target.parentElement.classList.add('incorrect');
+                    questionDiv.querySelector(`input[value="${correctAnswer}"]`).parentElement.classList.add('correct');
+                }
+                
+                // Check if quiz is finished
+                const totalAnswered = quizContainer.querySelectorAll('input[type="radio"]:disabled').length / 4;
+                if (totalAnswered === 5) {
+                    resultsContainer.innerHTML = `Quiz Complete! You scored ${correctCount} out of 5.`;
+                    resultsContainer.classList.add(correctCount >= 3 ? 'success' : 'failure');
+                }
+            }
+        });
+    }
+    function getOptions(correctAnswer) {
+        const allNames = wineData.map(w => w.name);
+        const options = new Set([correctAnswer]);
+        while(options.size < 4) {
+            options.add(allNames[Math.floor(Math.random() * allNames.length)]);
+        }
+        return [...options].sort(() => 0.5 - Math.random());
+    }
+
+    // --- Study Mode: Visual Explorer ---
+    let selectedVisualWineId = null;
+    function renderVisualExplorer() {
+        const wineListContainer = document.getElementById('visual-wine-list');
+        wineListContainer.innerHTML = wineData.map(wine => `<span class="wine-plot-item" data-id="${wine.id}">${wine.name}</span>`).join('');
+        wineListContainer.addEventListener('click', e => {
+            if (e.target.classList.contains('wine-plot-item')) {
+                selectedVisualWineId = parseInt(e.target.dataset.id);
+                wineListContainer.querySelectorAll('.wine-plot-item').forEach(item => item.classList.remove('selected'));
+                e.target.classList.add('selected');
+                renderSpectrumCharts();
+            }
+        });
+
+        const groupBtnContainer = document.getElementById('group-buttons-container');
+        const mainGrapes = [...new Set(wineData.map(w => w.grape))];
+        groupBtnContainer.innerHTML = mainGrapes.map(g => `<button class="group-btn" data-grape="${g}">${g}</button>`).join('');
+        groupBtnContainer.addEventListener('click', e => {
+            if(e.target.classList.contains('group-btn')) {
+                groupBtnContainer.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                renderComparativeGroupings(e.target.dataset.grape);
+            }
+        });
+    }
+    function renderSpectrumCharts() {
+        const container = document.getElementById('spectrum-charts-container');
+        const wine = wineData.find(w => w.id === selectedVisualWineId);
+        const charts = [
+            { title: 'Body', legend: ['Light', 'Full'], key: 'body' },
+            { title: 'Acidity', legend: ['Mellow', 'Sharp'], key: 'acidity' },
+            { title: 'Fruit vs. Earth', legend: ['Earthy/Mineral', 'Fruit-Forward'], key: 'fruit' },
+            { title: 'Tannins (Reds)', legend: ['Soft', 'Firm'], key: 'tannins' },
+        ];
+        if (!wine) { container.innerHTML = "<p>Select a wine to see its spectrum analysis.</p>"; return; }
+        container.innerHTML = charts.map(chart => {
+            if (!wine.scales[chart.key]) return '';
+            const width = (wine.scales[chart.key] / 5) * 100;
+            return `
+                <div class="spectrum-chart">
+                    <h4>${chart.title}</h4>
+                    <div class="spectrum-bar-container"><div class="spectrum-bar" style="width: ${width}%"></div></div>
+                    <div class="spectrum-legend"><span>${chart.legend[0]}</span><span>${chart.legend[1]}</span></div>
+                </div>`;
+        }).join('');
+    }
+    function renderComparativeGroupings(grape) {
+        const container = document.getElementById('comparison-container');
+        const wines = wineData.filter(w => w.grape === grape);
+        container.innerHTML = wines.map(wine => `
+            <div class="comparison-card">
+                 <h4>${wine.name} (${wine.region})</h4>
+                 <p>${wine.taste}</p>
+            </div>
+        `).join('') || "<p>Select a grape to see comparisons.</p>";
+    }
+
+    // --- Service Mode: Recommender ---
+    function initializeRecommender() {
+        const container = document.getElementById('filter-container');
+        container.innerHTML = `<div class="filter-tags">${allTags.map(tag => `
+            <input type="checkbox" id="tag-${tag}" value="${tag}" class="filter-checkbox">
+            <label for="tag-${tag}">${tag}</label>
+        `).join('')}</div>`;
+        container.addEventListener('change', updateRecommenderResults);
+    }
+    function updateRecommenderResults() {
+        const container = document.getElementById('filter-results');
+        const selectedTags = [...document.querySelectorAll('#filter-container input:checked')].map(box => box.value);
+
+        if (selectedTags.length === 0) {
+            container.innerHTML = '<p>Select tags to see recommendations.</p>';
+            return;
+        }
+
+        const results = wineData.map(wine => {
+            const matches = selectedTags.filter(tag => wine.tags.includes(tag));
+            const mismatches = selectedTags.filter(tag => !wine.tags.includes(tag));
+            return { ...wine, score: matches.length, matches, mismatches };
+        }).filter(wine => wine.score > 0).sort((a,b) => b.score - a.score);
+
+        if (results.length === 0) {
+            container.innerHTML = '<p>No wines match that criteria.</p>';
+            return;
+        }
+
+        container.innerHTML = results.map(wine => `
+            <div class="wine-card match-card">
+                <h4>${wine.name}</h4>
+                <ul>
+                    ${wine.matches.map(tag => `<li class="match">✅ Matches: ${tag}</li>`).join('')}
+                    ${wine.mismatches.map(tag => `<li class="mismatch">❌ Doesn't Match: ${tag}</li>`).join('')}
+                </ul>
+            </div>`).join('');
+    }
+    
+    // --- Service Mode: Food Pairing ---
+    function initializeFoodPairing() {
+        const container = document.getElementById('food-menu-container');
+        const resultsContainer = document.getElementById('pairing-results');
+        container.innerHTML = foodMenu.map(item => `<div class="food-card" data-food="${item}">${item}</div>`).join('');
+        container.addEventListener('click', e => {
+            if (e.target.classList.contains('food-card')) {
+                container.querySelectorAll('.food-card').forEach(c => c.classList.remove('selected'));
+                e.target.classList.add('selected');
+                const food = e.target.dataset.food;
+                let pairings = wineData.filter(w => w.pairings.includes(food));
+                let specialNote = '';
+
+                if (food === 'Modern Caesar Salad') {
+                    const salmonWines = wineData.filter(w => w.pairings.includes('Modern Caesar with Salmon'));
+                    pairings = [...new Set([...pairings, ...salmonWines])];
+                    specialNote = `<div class="special-note"><strong>Suggestion:</strong> For the Caesar with Salmon, the <strong>${salmonWines.map(w=>w.name).join(' or ')}</strong> are particularly excellent choices.</div>`;
+                }
+
+                if (pairings.length === 0) {
+                    resultsContainer.innerHTML = `<h3>No recommended pairings for ${food}.</h3>`;
+                    return;
+                }
+                resultsContainer.innerHTML = `
+                    <h3>Pairings for ${food}</h3>
+                    ${specialNote}
+                    ${pairings.map(wine => `
+                         <div class="wine-card">
+                            <h4>${wine.name}</h4>
+                            <div class="pairing-reason"><strong>Why it works:</strong> ${wine.taste}</div>
+                         </div>
+                    `).join('')}`;
+            }
+        });
+    }
+
+    // --- Initial Load & Nav Setup ---
+    setupNav('.main-nav-btn', '.content-section');
+    setupNav('#study-section .sub-nav-btn', '#study-section .tool-content');
+    setupNav('#visuals-tool .sub-nav-btn', '#visuals-tool .tool-content');
+    setupNav('#service-section .sub-nav-btn', '#service-section .tool-content');
+
+    renderFlashcards();
     generateQuiz();
     document.getElementById('new-quiz-btn').addEventListener('click', generateQuiz);
-    
-    renderVisualExplorerWineList();
-    renderSpectrumCharts();
-    generateComparativeGroupings();
-    
+    renderVisualExplorer();
     initializeRecommender();
     initializeFoodPairing();
 });
